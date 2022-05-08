@@ -32,7 +32,7 @@ public class DiaryWinGUI extends JFrame {
 	private JTextField textFieldHMIOutputText;
 	JFormattedTextField fromDateFormatted = new JFormattedTextField();
 	JFormattedTextField toDateFormatted = new JFormattedTextField();
-	JTextArea textArea = new JTextArea();
+	public static JTextArea textArea = new JTextArea();
 	// Setup handling flags
 	static Boolean newDay = false;
 
@@ -174,23 +174,25 @@ public class DiaryWinGUI extends JFrame {
 					break;
 
 				case "New" :
-					textArea.setText(null);
-					newDay = true;
-					textArea.append(" Dagboks anteckning ");
 					Diary carpeDiem = new Diary(null, null, 0);
-					textArea.append(parseString(
-							String.format("%s%n", carpeDiem.toDate())));
-					textArea.append(":\n ");
+					diaryList.add(carpeDiem);
+					textArea.setText("=== Dagboks anteckning ===\n");
+					textArea.append(DiaryLibrary.newDay());
+					newDay = true;
+					textArea.append("\n");
 					textArea.requestFocus();
 					break;
 
 				case "Time" :
+					textArea.append("\n");
 					textArea.append(
 							String.format(DiaryLibrary.getCurrentDateTime()));
+					textArea.append("\n");
+					textArea.requestFocus();
 					break;
 
 				case "Save" :
-
+					textArea.setText(DiaryLibrary.saveTheDay());
 					break;
 
 				case "Delete" :
