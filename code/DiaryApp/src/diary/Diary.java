@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter; // Import the DateTimeFormatter class
 public class Diary implements Comparable<Diary> {
 
 	String Date;
-	String Path;
+	static String Path;
 	int Status;
 
 	/*
@@ -23,7 +23,7 @@ public class Diary implements Comparable<Diary> {
 	 */
 	public Diary(String date, String path, int status) {
 		LocalDateTime myDateObj = LocalDateTime.now();
-		System.out.println("Before formatting: " + myDateObj);
+		// System.out.println("Before formatting: " + myDateObj);
 
 		DateTimeFormatter myFormatDate = DateTimeFormatter
 				.ofPattern("yyyyMMdd");
@@ -34,16 +34,16 @@ public class Diary implements Comparable<Diary> {
 		path = myDateObj.format(myFormatPath);
 		status = 0;
 		this.Date = date;
-		this.Path = path;
+		Diary.Path = path;
 		this.Status = status;
-		System.out.println("Datum: " + date);
-		System.out.println("Path: " + path);
+		// System.out.println("Datum: " + date);
+		// System.out.println("Path: " + path);
 	}
 
 	/**
 	 * @return the path
 	 */
-	String getPath() {
+	static public String getPath() {
 		return Path;
 	}
 

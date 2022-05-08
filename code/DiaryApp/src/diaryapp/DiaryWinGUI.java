@@ -84,6 +84,7 @@ public class DiaryWinGUI extends JFrame {
 		// Setting up Output INFO panel
 		textFieldHMIOutputText = new JTextField();
 		textFieldHMIOutputText.setBackground(Color.ORANGE);
+		textFieldHMIOutputText.setFont(new Font("Tahoma", Font.BOLD, 14));
 		textFieldHMIOutputText.setColumns(20);
 		textFieldHMIOutputText.setBounds(80, 41, 795, 28);
 		frame.getContentPane().add(textFieldHMIOutputText);
@@ -175,8 +176,10 @@ public class DiaryWinGUI extends JFrame {
 
 				case "New" :
 					String year = DiaryLibrary.getCurrentDateTime();
-					String month = "05";
-					Diary carpeDiem = new Diary(year, month, 0);
+					String path = DiaryLibrary.getCurrentPath();
+					textFieldHMIOutputText
+							.setText("  NY DAG TILLAGD TILL DAGBOK");
+					Diary carpeDiem = new Diary(year, path, 0);
 					diaryList.addItem(carpeDiem);
 					textArea.setText("=== Dagboks anteckning ===\n");
 					textArea.append(DiaryLibrary.newDay());
@@ -194,7 +197,15 @@ public class DiaryWinGUI extends JFrame {
 					break;
 
 				case "Save" :
-					textArea.setText(DiaryLibrary.saveTheDay());
+					if (newDay == true) {
+						DiaryLibrary.saveTheDay();
+						textFieldHMIOutputText
+								.setText("  DAG SPARAD TILL DAGBOK");
+						newDay = false;
+					} else {
+						textFieldHMIOutputText.setText(
+								"  SPARA ÖVER TIDIGARE DAGBOKS NOTERING?");
+					}
 					break;
 
 				case "Delete" :

@@ -50,7 +50,7 @@ public class DiaryLibrary implements Library<Diary> {
 	}
 	// "Save" Save Diary
 	@SuppressWarnings("unused")
-	public static String saveTheDay() {
+	public static void saveTheDay() {
 		String saveText = DiaryWinGUI.textArea.getText();
 		String year = "2022";
 		String month = "05";
@@ -73,7 +73,7 @@ public class DiaryLibrary implements Library<Diary> {
 			System.out.println("Exception occurred: " + ioe);
 		}
 
-		return "DAY SAVED";
+		// return "DAY SAVED";
 	}
 
 	// "Delete" Delete post
@@ -86,5 +86,9 @@ public class DiaryLibrary implements Library<Diary> {
 	// "Help"
 
 	// "Exit"
+
+	public static String getCurrentPath() {
+		return Diary.getPath();
+	}
 
 }

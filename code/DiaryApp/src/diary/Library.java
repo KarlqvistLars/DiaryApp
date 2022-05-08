@@ -20,4 +20,9 @@ public interface Library<T> {
 	 */
 	boolean removeItem(T item);
 
+	public static String getPath() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
