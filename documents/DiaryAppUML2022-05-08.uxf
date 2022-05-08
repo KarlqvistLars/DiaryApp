@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <help_text/>
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>96</x>
+      <y>312</y>
+      <w>376</w>
+      <h>400</h>
+    </coordinates>
+    <panel_attributes>diaryapp::DiaryWinGUI
+--
+-serialVersionUID = 1L: long
++frame: JFrame
+-textFieldSearch: JTextField
+-textChoice: JTextField
+-textFieldHMIOutputText: JTextField
+~fromDateFormatted = new JFormattedTextField(): JFormattedTextField
+~toDateFormatted = new JFormattedTextField(): JFormattedTextField
++textArea = new JTextArea(): JTextArea
+~newDay = false: Boolean
+-theModel: Diary
+--
+~DiaryWinGUI(Diary model): ctor
++addButtonToFrame(JButton button): void
+~parseString(String format): String
+-resetForm(): void
+-updateGUI(): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>856</x>
+      <y>312</y>
+      <w>352</w>
+      <h>400</h>
+    </coordinates>
+    <panel_attributes>diary::Diary
+--
+~Date: String
+~Path: String
+~Status: int
+--
++Diary(String date, String path, int status): ctor
++getPath(): String
+~setPath(String path): void
+~getStatus(): int
+~setStatus(int status): void
+~getDate(): String
++compareTo(Diary o): int
++toDate(): String
++dayToString(): String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>504</x>
+      <y>312</y>
+      <w>320</w>
+      <h>400</h>
+    </coordinates>
+    <panel_attributes>diary::DiaryLibrary
+--
+~maxItemID = 1: int
+~diaryList: List&lt;Diary&gt;
+~filename = "": String
+--
++DiaryLibrary(): ctor
++newDay(): String
++addItem(Diary item): boolean
++getCurrentDateTime(): String
++saveTheDay(): void
++removeItem(Diary item): boolean
++getCurrentPath(): String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>504</x>
+      <y>168</y>
+      <w>320</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+diary::Library
+--
+--
+~addItem(T item): boolean
+~removeItem(T item): boolean
++getPath(): String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>96</x>
+      <y>168</y>
+      <w>376</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>/diaryapp::DiaryGUIApp/
+--
+--
++main(String[] args): void
+--
+Huvudprogrammet
+Startar GUI delen</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>272</x>
+      <y>280</y>
+      <w>24</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
