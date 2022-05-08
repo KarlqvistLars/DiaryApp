@@ -13,7 +13,7 @@ import diaryapp.DiaryWinGUI;
 public class DiaryLibrary implements Library<Diary> {
 
 	int maxItemID = 1;
-	private List<Diary> diaryList;
+	static List<Diary> diaryList;
 	static String filename = "";
 
 	/**
@@ -35,7 +35,6 @@ public class DiaryLibrary implements Library<Diary> {
 		return getCurrentDateTime();
 	}
 
-	@Override
 	public boolean addItem(Diary item) {
 		diaryList.add(item);
 		return true;
@@ -50,15 +49,26 @@ public class DiaryLibrary implements Library<Diary> {
 		return stamp;
 	}
 	// "Save" Save Diary
+	@SuppressWarnings("unused")
 	public static String saveTheDay() {
 		String saveText = DiaryWinGUI.textArea.getText();
-
+		String year = "2022";
+		String month = "05";
+		String name = "20220508";
+		if (true) {
+			filename = String.format(".\\%s\\%s\\%s.txt", year, month, name);
+			try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
+				pw.println(saveText);
+			} catch (IOException ioe) {
+				System.out.println("Exception occurred: " + ioe);
+				System.out.println("Skapa funktion som skapar nytt bibliotek");
+			}
+		}
+		filename = "diarylist.txt";
 		try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
-			pw.println(saveText);
-
-			// for (Parts savedPart : this.partsList) {
-			// pw.println(savedPart);
-			// }
+			for (Diary savedDay : diaryList) {
+				pw.println(savedDay.dayToString());
+			}
 		} catch (IOException ioe) {
 			System.out.println("Exception occurred: " + ioe);
 		}

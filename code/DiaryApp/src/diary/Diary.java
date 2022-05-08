@@ -28,7 +28,8 @@ public class Diary implements Comparable<Diary> {
 		DateTimeFormatter myFormatDate = DateTimeFormatter
 				.ofPattern("yyyyMMdd");
 		DateTimeFormatter myFormatPath = DateTimeFormatter
-				.ofPattern(".\\yyyy\\MM\\");
+				.ofPattern("./yyyy/MM/");
+		// .ofPattern(".\\yyyy\\MM\\");
 		date = myDateObj.format(myFormatDate);
 		path = myDateObj.format(myFormatPath);
 		status = 0;
@@ -85,4 +86,10 @@ public class Diary implements Comparable<Diary> {
 	public String toDate() {
 		return String.format("Diary [Date=%s]", Date);
 	}
+
+	public String dayToString() {
+		return String.format("Diary [Date=%s, Path=%s, Status=%s]", Date, Path,
+				Status);
+	}
+
 }
