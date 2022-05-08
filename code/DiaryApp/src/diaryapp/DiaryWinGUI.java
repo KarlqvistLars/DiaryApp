@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -17,6 +16,7 @@ import javax.swing.border.Border;
 
 import diary.Diary;
 import diary.DiaryLibrary;
+import diary.Library;
 
 public class DiaryWinGUI extends JFrame {
 
@@ -147,7 +147,7 @@ public class DiaryWinGUI extends JFrame {
 	class AppActionListener implements ActionListener {
 
 		String filename = "dayslist.txt";
-		List<Diary> diaryList;
+		Library<Diary> diaryList = new DiaryLibrary();
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 
@@ -174,8 +174,10 @@ public class DiaryWinGUI extends JFrame {
 					break;
 
 				case "New" :
-					Diary carpeDiem = new Diary(null, null, 0);
-					diaryList.add(carpeDiem);
+					String year = DiaryLibrary.getCurrentDateTime();
+					String month = "05";
+					Diary carpeDiem = new Diary(year, month, 0);
+					diaryList.addItem(carpeDiem);
 					textArea.setText("=== Dagboks anteckning ===\n");
 					textArea.append(DiaryLibrary.newDay());
 					newDay = true;
