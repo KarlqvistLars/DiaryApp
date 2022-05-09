@@ -35,6 +35,12 @@ public class DiaryLibrary implements Library<Diary> {
 		return getCurrentDateTime();
 	}
 
+	static String currentDay() {
+
+		return filename;
+
+	}
+
 	public boolean addItem(Diary item) {
 		diaryList.add(item);
 		return true;
@@ -49,12 +55,11 @@ public class DiaryLibrary implements Library<Diary> {
 		return stamp;
 	}
 	// "Save" Save Diary
-	@SuppressWarnings("unused")
 	public static void saveTheDay() {
 		String saveText = DiaryWinGUI.textArea.getText();
-		String year = "2022";
-		String month = "05";
-		String name = "20220508";
+		String year = Diary.getYear();
+		String month = Diary.getMonth();
+		String name = Diary.getDate();
 		if (true) {
 			filename = String.format(".\\%s\\%s\\%s.txt", year, month, name);
 			try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
@@ -72,8 +77,6 @@ public class DiaryLibrary implements Library<Diary> {
 		} catch (IOException ioe) {
 			System.out.println("Exception occurred: " + ioe);
 		}
-
-		// return "DAY SAVED";
 	}
 
 	// "Delete" Delete post
