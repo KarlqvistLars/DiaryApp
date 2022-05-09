@@ -5,11 +5,11 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
@@ -26,6 +26,7 @@ public class DiaryWinGUI extends JFrame {
 	private static final long serialVersionUID = 1L;
 	// The window frame
 	public JFrame frame;
+
 	// Setup text fields
 	private JTextField textFieldSearch;
 	private JTextField textChoice;
@@ -37,6 +38,7 @@ public class DiaryWinGUI extends JFrame {
 	static Boolean newDay = false;
 
 	// model reference
+	// Diary kanske bör ändras till FormFields
 	private Diary theModel;
 
 	/**
@@ -136,8 +138,8 @@ public class DiaryWinGUI extends JFrame {
 
 	public void addButtonToFrame(JButton button) {
 		button.addActionListener(new AppActionListener());
-		button.setBackground(Color.LIGHT_GRAY);
-		button.setBorder(BorderFactory.createRaisedBevelBorder());
+		// button.setBackground(Color.LIGHT_GRAY);
+		// button.setBorder(BorderFactory.createRaisedBevelBorder());
 		frame.getContentPane().add(button);
 	}
 
@@ -158,10 +160,10 @@ public class DiaryWinGUI extends JFrame {
 
 				case "Reset" :
 					resetForm();
+					textFieldHMIOutputText.setText("  ALLA FÄLT RENSAS");
 					break;
 
 				case "Search" :
-					// resetForm();
 					// Denna funk implementeras senare.
 					break;
 
@@ -189,6 +191,8 @@ public class DiaryWinGUI extends JFrame {
 					break;
 
 				case "Time" :
+					textFieldHMIOutputText
+							.setText("  TIDSSTÄMPEL INFOGAD I DAGBOK");
 					textArea.append("\n");
 					textArea.append(
 							String.format(DiaryLibrary.getCurrentDateTime()));
@@ -203,17 +207,32 @@ public class DiaryWinGUI extends JFrame {
 								.setText("  DAG SPARAD TILL DAGBOK");
 						newDay = false;
 					} else {
+						DialogBox okPane = new DialogBox();
 						textFieldHMIOutputText.setText(
 								"  SPARA ÖVER TIDIGARE DAGBOKS NOTERING?");
+						int val = okPane.OptionOkNoCancel();
+
+						if (val == 0) {
+							DiaryLibrary.saveTheDay();
+							textFieldHMIOutputText
+									.setText("  DAG SPARAD TILL DAGBOK");
+							newDay = false;
+						} else {
+							textFieldHMIOutputText.setText("  DAGEN EJ SPARAD");
+							newDay = false;
+						}
 					}
 					break;
 
 				case "Delete" :
-
+					// Denna funk implementeras senare.
 					break;
 
 				case "Help" :
-
+					DialogBox helpPane = new DialogBox();
+					textFieldHMIOutputText
+							.setText("  INFO OM APPEN OCH DESS SYFTE");
+					helpPane.OptionHelp();
 					break;
 
 				case "Exit" :
@@ -225,6 +244,32 @@ public class DiaryWinGUI extends JFrame {
 			updateGUI();
 		}
 
+		JFrame okBox;
+		JFrame helpBox;
+		public class DialogBox {
+			int OptionOkNoCancel() {
+				okBox = new JFrame();
+				okBox.setLocationRelativeTo(frame);
+				okBox.setTitle("Spara");
+				int t = JOptionPane.showConfirmDialog(okBox,
+						"Spara över tidigare dagboks notering? ");
+				// System.out.println(t);
+				return t;
+			}
+			void OptionHelp() {
+				helpBox = new JFrame();
+				helpBox.setLocationRelativeTo(frame);
+				helpBox.setTitle("Help");
+				JOptionPane.showMessageDialog(helpBox,
+						"Detta är ett dagboksprogram av Lars Karlqvist.\n"
+								+ "Det är ännu inte någon färdig programvara utan \n"
+								+ "en egen övning i java programmering.\n\n"
+								+ "Men ifall ni ändå tycker att denna lilla app har potential,\n"
+								+ "och kankse tycker att den är så bra att ni har arbete att erbjuda mig?\n"
+								+ "Ja då är ni välkomna att höra av er till mig på min LinkedIN profil.\n\n"
+								+ "https://www.linkedin.com/in/lars-karlqvist-582b7a28/");
+			}
+		}
 	}
 
 	String parseString(String format) {
@@ -256,4 +301,5 @@ public class DiaryWinGUI extends JFrame {
 		// buyDateJTF.setText(String.valueOf(theModel.getBuyDate()));
 		// toDateFormatted.setText(String.valueOf(theModel.getPrice()));
 	}
+
 }

@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter; // Import the DateTimeFormatter class
  */
 public class Diary implements Comparable<Diary> {
 
-	String Date;
+	static String Date;
 	static String Path;
 	int Status;
 
@@ -33,11 +33,9 @@ public class Diary implements Comparable<Diary> {
 		date = myDateObj.format(myFormatDate);
 		path = myDateObj.format(myFormatPath);
 		status = 0;
-		this.Date = date;
+		Diary.Date = date;
 		Diary.Path = path;
 		this.Status = status;
-		// System.out.println("Datum: " + date);
-		// System.out.println("Path: " + path);
 	}
 
 	/**
@@ -73,8 +71,20 @@ public class Diary implements Comparable<Diary> {
 	/**
 	 * @return the date
 	 */
-	String getDate() {
+	static String getDate() {
 		return Date;
+	}
+
+	static String getYear() {
+		LocalDateTime myDateObj = LocalDateTime.now();
+		DateTimeFormatter myFormatDate = DateTimeFormatter.ofPattern("yyyy");
+		return myDateObj.format(myFormatDate);
+	}
+
+	static String getMonth() {
+		LocalDateTime myDateObj = LocalDateTime.now();
+		DateTimeFormatter myFormatDate = DateTimeFormatter.ofPattern("MM");
+		return myDateObj.format(myFormatDate);
 	}
 
 	@Override
