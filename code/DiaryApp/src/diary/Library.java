@@ -25,4 +25,6 @@ public interface Library<T> {
 		return null;
 	}
 
+	String openDiary(String filename);
+
 }
