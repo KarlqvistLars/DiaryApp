@@ -1,5 +1,7 @@
 package diary;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -7,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import diaryapp.DiaryWinGUI;
 
@@ -24,21 +27,110 @@ public class DiaryLibrary implements Library<Diary> {
 	}
 
 	// "Reset" ?
+	// public static String saveAction() {
+	// DiaryWinGUI.
+	// return filename;
+	// }
 
 	// "Search" Search Diary
 
 	// "Open" Open/Edit diary post
+	@Override
+	public String openDiary(String filename) {
+		String returMessage = "";
+		try {
+			File myObj = new File(filename);
+			@SuppressWarnings("resource")
+			Scanner myReader = new Scanner(myObj);
+
+			List<Diary> fileInput = new ArrayList<>();
+
+			while (myReader.hasNextLine()) {
+				String data = myReader.nextLine();
+				// System.out.format(" %s\n", data);
+				/**
+				 * Parse data from filename to partslist
+				 */
+				String onePart = data.substring(data.indexOf('[') + 1,
+						data.indexOf(']') + 1);
+				String[] parts = onePart.split("=");
+				String date = parts[1].substring(0, parts[1].indexOf(", Path"));
+				String path = parts[2].substring(0,
+						parts[2].indexOf(", Status"));
+				String status = parts[3];
+
+				// Clean and det values to variables
+				date = date.strip();
+				path = path.strip();
+				status = status.strip();
+
+				int stat = Integer.parseInt(status);
+				// Keep track on highest uniqID(itemId) value
+				// if (itemId > maxItemID) {
+				// maxItemID = itemId;
+				fileInput.add(new Diary(date, path, stat));
+				returMessage = "   DAGBOK DATABAS LADDAD";
+			}
+			// partsList = fileInput;
+
+			// System.out.println(
+			// " ======================== Info Parts Library
+			// ========================");
+			// System.out.println(" File name: " + myObj.getName());
+			// System.out.println(" Absolute path: \n " +
+			// myObj.getAbsolutePath());
+			// System.out.println(" File size in bytes " + myObj.length());
+			// System.out.println(
+			// "=====================================================================");
+		} catch (FileNotFoundException err) {
+			returMessage = "   ETT FEL INTRÄFFADE";
+			err.printStackTrace();
+		}
+		return returMessage;
+	}
+
+	static public String openTheDay(String filename) {
+		String dayText = "";
+		// System.out.println(filename);
+		try {
+			File myObj = new File(filename);
+			@SuppressWarnings("resource")
+			Scanner myReader = new Scanner(myObj);
+			while (myReader.hasNextLine()) {
+				String data = myReader.nextLine();
+				dayText = String.format("%s%s\n", dayText, data);
+			}
+		} catch (FileNotFoundException err) {
+			// err.printStackTrace();
+		}
+		// System.out.println(dayText);
+		return dayText;
+	}
 
 	// "New"
 	public static String newDay() {
-
 		return getCurrentDateTime();
 	}
 
-	static String currentDay() {
+	public static String getInputFilePath(String filename) {
+		try {
+			String year = "";
+			String month = "";
+			month = (String) filename.subSequence(4, 6);
+			year = (String) filename.subSequence(0, 4);
+			return String.format("./%s/%s/%s.txt ", year, month, filename);
+		} catch (StringIndexOutOfBoundsException err) {
+			System.out.println("Exception occurred: " + err);
+			return filename;
+		}
 
+	}
+	static public String currentDay() {
+		String year = Diary.getYear();
+		String month = Diary.getMonth();
+		String name = Diary.getDate();
+		filename = String.format(".\\%s\\%s\\%s.txt", year, month, name);
 		return filename;
-
 	}
 
 	public boolean addItem(Diary item) {
@@ -54,14 +146,11 @@ public class DiaryLibrary implements Library<Diary> {
 		String stamp = myDateObj.format(myFormatDate);
 		return stamp;
 	}
+
 	// "Save" Save Diary
-	public static void saveTheDay() {
+	static public void saveTheDay(String filename) {
 		String saveText = DiaryWinGUI.textArea.getText();
-		String year = Diary.getYear();
-		String month = Diary.getMonth();
-		String name = Diary.getDate();
 		if (true) {
-			filename = String.format(".\\%s\\%s\\%s.txt", year, month, name);
 			try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
 				pw.println(saveText);
 			} catch (IOException ioe) {
