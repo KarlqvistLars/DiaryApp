@@ -13,11 +13,19 @@ public class Diary implements Comparable<Diary> {
 	static String Date;
 	static String Path;
 	int Status;
-	/*
+
+	/**
 	 * Constructor of Diary day post. Containing date, relative path to file
 	 * location and status. Filename should be be constructed of these date. Ex.
 	 * 20220415.txt at location: root\2022\04 Status is to keep track if the
 	 * file is new or edited.
+	 * 
+	 * @param date
+	 *            Date "20220415"
+	 * @param path
+	 *            Path "root\2022\04"
+	 * @param status
+	 *            Status on the library post yet to be implemented.
 	 */
 	public Diary(String date, String path, int status) {
 		LocalDateTime myDateObj = LocalDateTime.now();
@@ -86,11 +94,6 @@ public class Diary implements Comparable<Diary> {
 		return myDateObj.format(myFormatDate);
 	}
 
-	@Override
-	public int compareTo(Diary o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 	/**
 	 * Method for storing daliypost in "database" textfile.
 	 * 
@@ -105,4 +108,12 @@ public class Diary implements Comparable<Diary> {
 				Status);
 	}
 
+	/**
+	 * Search funktion
+	 */
+	@Override
+	public int compareTo(Diary o) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

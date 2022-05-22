@@ -20,7 +20,8 @@ public class DiaryLibrary implements Library<Diary> {
 	static String filename = "";
 
 	/**
-	 * Tillsammans med Partslibrary : skapar en array av 'partslist'
+	 * Constructor DiaryLibrary Tillsammans med Partslibrary : skapar en array
+	 * av 'partslist'
 	 */
 	public DiaryLibrary() {
 		diaryList = new ArrayList<>();
@@ -35,19 +36,15 @@ public class DiaryLibrary implements Library<Diary> {
 	// "Search" Search Diary
 
 	// "Open" Open/Edit diary post
-	@Override
 	public String openDiary(String filename) {
 		String returMessage = "";
 		try {
 			File myObj = new File(filename);
 			@SuppressWarnings("resource")
 			Scanner myReader = new Scanner(myObj);
-
 			List<Diary> fileInput = new ArrayList<>();
-
 			while (myReader.hasNextLine()) {
 				String data = myReader.nextLine();
-				// System.out.format(" %s\n", data);
 				/**
 				 * Parse data from filename to partslist
 				 */
@@ -71,7 +68,7 @@ public class DiaryLibrary implements Library<Diary> {
 				fileInput.add(new Diary(date, path, stat));
 				returMessage = "   DAGBOK DATABAS LADDAD";
 			}
-			// partsList = fileInput;
+			diaryList = fileInput;
 
 			// System.out.println(
 			// " ======================== Info Parts Library
