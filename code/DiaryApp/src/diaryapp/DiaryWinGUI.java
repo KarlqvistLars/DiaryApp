@@ -267,9 +267,7 @@ public class DiaryWinGUI extends JFrame {
 					break;
 
 				case "Save" :
-
 					Day.saveDay(okPane);
-
 					break;
 
 				case "Delete" :
@@ -344,29 +342,6 @@ public class DiaryWinGUI extends JFrame {
 		fromDateFormatted.setText(null);
 		textArea.setBackground(Color.LIGHT_GRAY);
 	}
-
-	// private void saveDay(DialogBox okPane) {
-	// if (textArea.getBackground() == Color.WHITE) {
-	// if (newDay == true) {
-	// DiaryLibrary.saveTheDay(DiaryLibrary.currentDay());
-	// textFieldHMIOutputText.setText(" DAG SPARAD TILL DAGBOK");
-	// newDay = false;
-	// } else {
-	// textFieldHMIOutputText
-	// .setText(" SPARA ÖPPEN DAGBOKS NOTERING?");
-	// int val = okPane.OptionOkNoCancel();
-	//
-	// if (val == 0) {
-	// DiaryLibrary.saveTheDay(DiaryLibrary.currentDay());
-	// textFieldHMIOutputText.setText(" DAG SPARAD TILL DAGBOK");
-	// newDay = false;
-	// } else {
-	// textFieldHMIOutputText.setText(" DAGEN EJ SPARAD");
-	// newDay = false;
-	// }
-	// }
-	// }
-	// }
 
 	/**
 	 * This method will read model attributes and force a visual update

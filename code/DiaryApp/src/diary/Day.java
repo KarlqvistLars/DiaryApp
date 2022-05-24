@@ -28,26 +28,15 @@ public class Day {
 	public static boolean saveDay(DialogBox okPane) {
 		//
 		if (DiaryWinGUI.textArea.getBackground() == Color.WHITE) {
-			if (newDay == true) {
+			DiaryWinGUI.textFieldHMIOutputText
+					.setText("  SPARA ÖPPEN DAGBOKS NOTERING?");
+			int val = okPane.OptionOkNoCancel();
+			if (val == 0) {
 				DiaryLibrary.saveTheDay(DiaryLibrary.currentDay());
 				DiaryWinGUI.textFieldHMIOutputText
 						.setText("  DAG SPARAD TILL DAGBOK");
-				newDay = false;
 			} else {
-				DiaryWinGUI.textFieldHMIOutputText
-						.setText("  SPARA ÖPPEN DAGBOKS NOTERING?");
-				int val = okPane.OptionOkNoCancel();
-
-				if (val == 0) {
-					DiaryLibrary.saveTheDay(DiaryLibrary.currentDay());
-					DiaryWinGUI.textFieldHMIOutputText
-							.setText("  DAG SPARAD TILL DAGBOK");
-					newDay = false;
-				} else {
-					DiaryWinGUI.textFieldHMIOutputText
-							.setText("  DAGEN EJ SPARAD");
-					newDay = false;
-				}
+				DiaryWinGUI.textFieldHMIOutputText.setText("  DAGEN EJ SPARAD");
 			}
 		}
 		return true;
