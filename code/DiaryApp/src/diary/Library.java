@@ -20,11 +20,22 @@ public interface Library<T> {
 	 */
 	boolean removeItem(T item);
 
+	/**
+	 * Read contents from file to library from databasefile 'filename'
+	 * diarylist.txt.
+	 *
+	 * @param filename
+	 *            diarylist.txt
+	 */
+	void readItems(String filename);
+
 	public static String getPath() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	String openDiary(String filename);
+
+	String showDaysOnTextArea();
 
 }

@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -45,7 +43,8 @@ public class DiaryWinGUI extends JFrame {
 	// Diary kanske bör ändras till FormFields
 	// private Diary theModel;
 
-	List<Diary> theModel = new ArrayList<>();;
+	private Diary theModel;
+	Library<Diary> days = new DiaryLibrary();
 
 	/**
 	 * Create the application and initialize the contents of the frame.
@@ -53,7 +52,9 @@ public class DiaryWinGUI extends JFrame {
 	DiaryWinGUI(Diary model) {
 
 		// håller den öppna databasen i minnet.
-		// theModel = loadDiaryList();
+		String filename = "diarylist.txt";
+		days.readItems(filename);
+		theModel = model;
 
 		// Fonts
 		// Font font1 = new Font("Calibri", Font.BOLD, 18);
@@ -200,7 +201,15 @@ public class DiaryWinGUI extends JFrame {
 					 */
 					textArea.setBackground(Color.WHITE);
 					textArea.setEnabled(true);
-					textArea.setText(filename);
+					// textArea.setText(filename);
+
+					textArea.setText(null);
+					textArea.append("\n PartsLibrary list\n");
+					textArea.append(makeLine("_", 98) + "\n");
+					textArea.append(days.showDaysOnTextArea());
+					System.out.print(days.showDaysOnTextArea());
+					textArea.append(makeLine("=", 98) + "\n");
+					// resetForm();
 
 					break;
 
@@ -359,30 +368,24 @@ public class DiaryWinGUI extends JFrame {
 	// }
 	// }
 
-	List<Diary> loadDiaryList() {
-
-		List<Diary> fileInput = new ArrayList<>();
-		String filename = "diarylist.txt";
-		textFieldHMIOutputText.setText(diaryLibrary.openDiary(filename));
-		// fileInput;
-	}
-	// myDays = new Diary("20220516", "./2022/05/", 0);
-	// myDays = new Diary("20220516", "./2022/05/", 0);
-
-	// for (Diary m : myDays) {
-	// lib.addItem(m);
-	// }
-
 	/**
 	 * This method will read model attributes and force a visual update
 	 */
 	private void updateGUI() {
-		// textFieldSearch.setText(String.valueOf(theModel.toString()));
+		textFieldSearch.setText(String.valueOf(theModel.toString()));
 		// textChoise.setText(String.valueOf(theModel.getPartNo()));
 		// textFieldHMIOutputText.setText(String.valueOf(theModel.getName()));
 		// fromDateFormatted.setText(String.valueOf(theModel.getWhereToBuy()));
 		// buyDateJTF.setText(String.valueOf(theModel.getBuyDate()));
 		// toDateFormatted.setText(String.valueOf(theModel.getPrice()));
+	}
+	static String makeLine(String sign, int signCount) {
+		StringBuilder returnText = new StringBuilder();
+		returnText.append(" ");
+		for (int n = 0; n < signCount; n++) {
+			returnText.append(sign);
+		}
+		return returnText.toString();
 	}
 
 }

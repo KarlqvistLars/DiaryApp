@@ -28,10 +28,6 @@ public class DiaryLibrary implements Library<Diary> {
 	}
 
 	// "Reset" ?
-	// public static String saveAction() {
-	// DiaryWinGUI.
-	// return filename;
-	// }
 
 	// "Search" Search Diary
 
@@ -69,16 +65,6 @@ public class DiaryLibrary implements Library<Diary> {
 				returMessage = "   DAGBOK DATABAS LADDAD";
 			}
 			diaryList = fileInput;
-
-			// System.out.println(
-			// " ======================== Info Parts Library
-			// ========================");
-			// System.out.println(" File name: " + myObj.getName());
-			// System.out.println(" Absolute path: \n " +
-			// myObj.getAbsolutePath());
-			// System.out.println(" File size in bytes " + myObj.length());
-			// System.out.println(
-			// "=====================================================================");
 		} catch (FileNotFoundException err) {
 			returMessage = "   ETT FEL INTRÄFFADE";
 			err.printStackTrace();
@@ -146,6 +132,7 @@ public class DiaryLibrary implements Library<Diary> {
 
 	// "Save" Save Diary
 	static public void saveTheDay(String filename) {
+		// Sparar textfilen YYMMDD.txt
 		String saveText = DiaryWinGUI.textArea.getText();
 		if (true) {
 			try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
@@ -155,6 +142,7 @@ public class DiaryLibrary implements Library<Diary> {
 				System.out.println("Skapa funktion som skapar nytt bibliotek");
 			}
 		}
+		// Lägg till kod för att spara databasfilen diarylist.txt
 		filename = "diarylist.txt";
 		try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
 			for (Diary savedDay : diaryList) {
@@ -176,8 +164,59 @@ public class DiaryLibrary implements Library<Diary> {
 
 	// "Exit"
 
+	public String showDaysOnTextArea() {
+		StringBuilder returnText = new StringBuilder();
+		for (Diary temp : diaryList) {
+			returnText.append(temp.dayToString());
+			returnText.append("\n");
+		}
+		return returnText.toString();
+	}
+
 	public static String getCurrentPath() {
 		return Diary.getPath();
+	}
+
+	@Override
+	public void readItems(String filename) {
+		// TODO Auto-generated method stub
+		String returMessage = "";
+		try {
+			File myObj = new File(filename);
+			@SuppressWarnings("resource")
+			Scanner myReader = new Scanner(myObj);
+			List<Diary> fileInput = new ArrayList<>();
+			while (myReader.hasNextLine()) {
+				String data = myReader.nextLine();
+				/**
+				 * Parse data from filename to partslist
+				 */
+				String onePart = data.substring(data.indexOf('[') + 1,
+						data.indexOf(']') + 1);
+				String[] parts = onePart.split("=");
+				String date = parts[1].substring(0, parts[1].indexOf(", Path"));
+				String path = parts[2].substring(0,
+						parts[2].indexOf(", Status"));
+				String status = parts[3].substring(0, parts[3].indexOf("]"));
+
+				// Clean and det values to variables
+				date = date.strip();
+				path = path.strip();
+				status = status.strip();
+
+				int stat = Integer.parseInt(status);
+				// Keep track on highest uniqID(itemId) value
+				// if (itemId > maxItemID) {
+				// maxItemID = itemId;
+				fileInput.add(new Diary(date, path, stat));
+				returMessage = "   DAGBOK DATABAS LADDAD";
+			}
+			diaryList = fileInput;
+		} catch (FileNotFoundException err) {
+			returMessage = "   ETT FEL INTRÄFFADE";
+			err.printStackTrace();
+		}
+		// return returMessage;
 	}
 
 }

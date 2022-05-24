@@ -26,7 +26,7 @@ public class Day {
 	 * @return
 	 */
 	public static boolean saveDay(DialogBox okPane) {
-		// kod för att ladda dag
+		//
 		if (DiaryWinGUI.textArea.getBackground() == Color.WHITE) {
 			if (newDay == true) {
 				DiaryLibrary.saveTheDay(DiaryLibrary.currentDay());

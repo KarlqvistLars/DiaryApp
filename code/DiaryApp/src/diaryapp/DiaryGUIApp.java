@@ -15,6 +15,7 @@ public abstract class DiaryGUIApp implements Library<DiaryLibrary> {
 					Diary model = new Diary("", "", 0);
 					DiaryWinGUI window = new DiaryWinGUI(model);
 					window.frame.setVisible(true);
+					window.frame.setTitle("DAGBOK v1.0");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
