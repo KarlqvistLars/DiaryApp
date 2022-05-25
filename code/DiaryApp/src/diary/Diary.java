@@ -10,8 +10,9 @@ import java.time.format.DateTimeFormatter; // Import the DateTimeFormatter class
  *
  */
 public class Diary implements Comparable<Diary> {
-	static String Date;
-	static String Path;
+	String Date;
+	String Path;
+	static String cPath;
 	int Status;
 
 	/**
@@ -28,25 +29,38 @@ public class Diary implements Comparable<Diary> {
 	 *            Status on the library post yet to be implemented.
 	 */
 	public Diary(String date, String path, int status) {
+		this.Date = date;
+		this.Path = path;
+		this.Status = status;
+	}
+
+	public void setDayToday() {
 		LocalDateTime myDateObj = LocalDateTime.now();
 		DateTimeFormatter myFormatDate = DateTimeFormatter
 				.ofPattern("yyyyMMdd");
 		DateTimeFormatter myFormatPath = DateTimeFormatter
 				.ofPattern("./yyyy/MM/");
-		date = myDateObj.format(myFormatDate);
-		path = myDateObj.format(myFormatPath);
-		status = 0;
-		Diary.Date = date;
-		Diary.Path = path;
-		this.Status = status;
+		Date = myDateObj.format(myFormatDate);
+		Path = myDateObj.format(myFormatPath);
+		Status = 0;
+		// return null;
 	}
 
 	/**
 	 * @return the path
 	 */
-	static public String getPath() {
+	public String getPath() {
 		return Path;
 	}
+
+	static public String getCPath() {
+		LocalDateTime myDateObj = LocalDateTime.now();
+		DateTimeFormatter myFormatPath = DateTimeFormatter
+				.ofPattern("./yyyy/MM/");
+		cPath = myDateObj.format(myFormatPath);
+		return cPath;
+	}
+
 	/**
 	 * @param path
 	 *            the path to set
@@ -70,9 +84,22 @@ public class Diary implements Comparable<Diary> {
 	/**
 	 * @return the date
 	 */
-	static String getDate() {
+	public String getDate() {
 		return Date;
 	}
+
+	/**
+	 * Getter for current Year now.
+	 * 
+	 * @return String of current Year ex. "2022"
+	 */
+	static String getTodaysDate() {
+		LocalDateTime myDateObj = LocalDateTime.now();
+		DateTimeFormatter myFormatDate = DateTimeFormatter
+				.ofPattern("yyyyMMdd");
+		return myDateObj.format(myFormatDate);
+	}
+
 	/**
 	 * Getter for current Year now.
 	 * 
@@ -100,11 +127,11 @@ public class Diary implements Comparable<Diary> {
 	 * @return Date in the format of a string. Ex."Diary [Date=20220508]"
 	 */
 	public String toDate() {
-		return String.format("Diary [Date=%s]", Date);
+		return String.format(" Diary [Date=%s]", Date);
 	}
 
 	public String dayToString() {
-		return String.format("Diary [Date=%s, Path=%s, Status=%s]", Date, Path,
+		return String.format(" Diary [Date=%s, Path=%s, Status=%s]", Date, Path,
 				Status);
 	}
 

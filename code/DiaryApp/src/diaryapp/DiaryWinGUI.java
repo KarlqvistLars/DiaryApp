@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -32,7 +33,7 @@ public class DiaryWinGUI extends JFrame {
 	// Setup text fields
 	private JTextField textFieldSearch;
 	JTextField textChoice = new JTextField();
-	public static JTextField textFieldHMIOutputText;
+	public static JTextField textFieldHMIOutputText = new JTextField();;
 	JFormattedTextField fromDateFormatted = new JFormattedTextField();
 	JFormattedTextField toDateFormatted = new JFormattedTextField();
 	public static JTextArea textArea = new JTextArea();
@@ -40,20 +41,23 @@ public class DiaryWinGUI extends JFrame {
 	static Boolean newDay = false;
 
 	// model reference
-	// Diary kanske bör ändras till FormFields
+
 	// private Diary theModel;
 
-	private Diary theModel;
+	@SuppressWarnings("unused")
+	private List<Diary> theModel;
 	Library<Diary> days = new DiaryLibrary();
+	String filename = "diarylist.txt";
 
 	/**
 	 * Create the application and initialize the contents of the frame.
 	 */
-	DiaryWinGUI(Diary model) {
+	DiaryWinGUI(List<Diary> model) {
 
-		// håller den öppna databasen i minnet.
-		String filename = "diarylist.txt";
-		days.readItems(filename);
+		// Programstart actions
+		textFieldHMIOutputText.setText(DiaryLibrary.readItems(filename));
+
+		// Är menad att hålla den öppna databasen i minnet.
 		theModel = model;
 
 		// Fonts
@@ -169,8 +173,7 @@ public class DiaryWinGUI extends JFrame {
 	 */
 	public class AppActionListener implements ActionListener {
 
-		String filename = "dayslist.txt";
-		Library<Diary> diaryList = new DiaryLibrary();
+		// Library<Diary> diaryList = new DiaryLibrary();
 		DialogBox okPane = new DialogBox();
 		@Override
 		public void actionPerformed(ActionEvent ae) {
@@ -204,10 +207,10 @@ public class DiaryWinGUI extends JFrame {
 					// textArea.setText(filename);
 
 					textArea.setText(null);
-					textArea.append("\n PartsLibrary list\n");
+					textArea.append("\n DiaryLibrary daylist\n");
 					textArea.append(makeLine("_", 98) + "\n");
-					textArea.append(days.showDaysOnTextArea());
-					System.out.print(days.showDaysOnTextArea());
+					textArea.append(DiaryLibrary.showDaysOnTextArea());
+					// System.out.print(Library.showDaysOnTextArea());
 					textArea.append(makeLine("=", 98) + "\n");
 					// resetForm();
 
@@ -219,6 +222,9 @@ public class DiaryWinGUI extends JFrame {
 					 * Kontroll på om dagen existerar Kontroll på om det är
 					 * någon i arbetsytan som först behöver sparas. När alla
 					 * förusättingar är klara öppna önskat dokument.
+					 * 
+					 * Denna case sats öppnar enpart txt filen för angiven dag
+					 * den ändrar eller öppnar inte databasfilen diarylist.
 					 */
 					if (textChoice.getText() != "") {
 						textArea.setBackground(Color.WHITE);
@@ -235,19 +241,13 @@ public class DiaryWinGUI extends JFrame {
 
 				case "New" :
 					if (textArea.getBackground() != Color.WHITE) {
-						textArea.setBackground(Color.WHITE);
-						textArea.setEnabled(true);
+						Day.newDay();
+						// "Databas" funktionen
 						String year = DiaryLibrary.getCurrentDateTime();
 						String path = DiaryLibrary.getCurrentPath();
-						textFieldHMIOutputText
-								.setText("  NY DAG TILLAGD TILL DAGBOK");
 						Diary carpeDiem = new Diary(year, path, 0);
-						diaryList.addItem(carpeDiem);
-						textArea.setText("=== Dagboks anteckning ===\n");
-						textArea.append(DiaryLibrary.newDay());
+						DiaryLibrary.addItem(carpeDiem);
 						newDay = true;
-						textArea.append("\n");
-						textArea.requestFocus();
 					} else {
 						textFieldHMIOutputText
 								.setText("  ÅTERSTÄLL FÄLT FÖRST");
@@ -347,12 +347,12 @@ public class DiaryWinGUI extends JFrame {
 	 * This method will read model attributes and force a visual update
 	 */
 	private void updateGUI() {
-		textFieldSearch.setText(String.valueOf(theModel.toString()));
-		// textChoise.setText(String.valueOf(theModel.getPartNo()));
-		// textFieldHMIOutputText.setText(String.valueOf(theModel.getName()));
-		// fromDateFormatted.setText(String.valueOf(theModel.getWhereToBuy()));
-		// buyDateJTF.setText(String.valueOf(theModel.getBuyDate()));
-		// toDateFormatted.setText(String.valueOf(theModel.getPrice()));
+		textFieldSearch.setText(String.valueOf(textFieldSearch.getText()));
+		textChoice.setText(String.valueOf(textChoice.getText()));
+		textFieldHMIOutputText
+				.setText(String.valueOf(textFieldHMIOutputText.getText()));
+		fromDateFormatted.setText(String.valueOf(fromDateFormatted.getText()));
+		toDateFormatted.setText(String.valueOf(fromDateFormatted.getText()));
 	}
 	static String makeLine(String sign, int signCount) {
 		StringBuilder returnText = new StringBuilder();

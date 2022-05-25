@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>9</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>522</x>
+      <y>324</y>
+      <w>423</w>
+      <h>558</h>
+    </coordinates>
+    <panel_attributes>diary::DiaryLibrary
+--
+~maxItemID = 1: int
+~diaryList: List&lt;Diary&gt;
+~filename = "": String
+~currentOpenDay = "": String
+--
+*+DiaryLibrary(): ctor*
+Constructor för CLASS DiaryLibrary
+Skapar diaryList som en ny ArrayList.
+*+loadDiary(): void*
+Method för att ladda listan för databasen med dagar diarylist.txt
+vid programstart.
+*+openDiary(String filename): String*
+
+*+openTheDay(String filename): String*
+Öpnnar dag angiven i inputfält "textChoice"
+*+newDay(): String*
+Skapar en ny dag mha CLASS Day?
+*+getInputFilePath(String filename): String*
+
+*+currentDay(): String*
+
+*+addItem(Diary item): boolean*
+
+*+getCurrentDateTime(): String*
+
+*+saveTheDay(String filename): void*
+
+*+removeItem(Diary item): boolean*
+
+*+showDaysOnTextArea(): String*
+
+*+getCurrentPath(): String*
+
+*+readItems(String filename): String*
+
+--
+*Håller till största del "Bussines logic" för programmet.*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>72</x>
+      <y>198</y>
+      <w>423</w>
+      <h>333</h>
+    </coordinates>
+    <panel_attributes>diaryapp::DiaryWinGUI
+--
+-serialVersionUID = 1L: long
++frame: JFrame
+-textFieldSearch: JTextField
+~textChoice = new JTextField(): JTextField
++textFieldHMIOutputText: JTextField
+~fromDateFormatted = new JFormattedTextField(): JFormattedTextField
+~toDateFormatted = new JFormattedTextField(): JFormattedTextField
++textArea = new JTextArea(): JTextArea
+~newDay = false: Boolean
+-theModel: Diary
+~days = new DiaryLibrary(): Library&lt;Diary&gt;
+--
+~DiaryWinGUI(Diary model): ctor
++addButtonToFrame(JButton button): void
+~parseString(String format): String
+-resetForm(): void
+-updateGUI(): void
+~makeLine(String sign, int signCount): String
+--
+*Skapar och håller GUI delen plus den*
+*del av logiken som sköter GUI'ts betende.*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>972</x>
+      <y>99</y>
+      <w>423</w>
+      <h>450</h>
+    </coordinates>
+    <panel_attributes>diary::Diary
+--
+~Date: String
+~Path: String
+~Status: int
+--
+*_Methods i CLASS Diary_*
+*+Diary(String date, String path, int status): ctor*
+Constructor för CLASS Diary.
+*+getPath(): String*
+Hämtat pathen som är laddad och skapad av Class konstruktorn.
+*~setPath(String path): void*
+Ändrar värdet på path till en ny.
+*~getStatus(): int*
+Hämtat pathen som är laddad och skapad av Class konstruktorn.
+*~setStatus(int status): void*
+Ändrar värdet på path till en ny.
+*~getDate(): String*
+Hämtar värdet på innevarande dags datum.
+*~getYear(): String*
+Hämtar värdet på innevarande år.
+*~getMonth(): String*
+Hämtar värdet på innevarande månad.
+*+toDate(): String*
+Returnerar datumen som en sträng för att presnteras i GUI't.
+*+dayToString(): String*
+Returnerar konstruktorn som en sträng för att skriva
+till databas textfilen. 
+*+compareTo(Diary o): int*
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>522</x>
+      <y>99</y>
+      <w>423</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+diary::Library
+--
+--
+~addItem(T item): boolean
+~removeItem(T item): boolean
++readItems(String filename): String
++getPath(): String
+~openDiary(String filename): String
+~showDaysOnTextArea(): String
+--
+*Interface för CLASS DiaryLibrary*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>972</x>
+      <y>585</y>
+      <w>423</w>
+      <h>252</h>
+    </coordinates>
+    <panel_attributes>diary::Day
+--
+~newDay = false: Boolean
+--
+*_Methods i CLASS Day_*
+*+loadDay(String day): boolean*
+Laddar vald daganteckning
+*+newDay(): boolean*
+Skapar en ny dag anteckning som först enbart finns i textrutan.
+*+saveDay(DialogBox okPane): boolean*
+Sparar dagen som för tillfället är öppen i anteckningsrutan.
+Denna kräver även en flagga för öppen dag.
+*+searchDay(String day): boolean*
+Sökfunktion för dagantecningar och dess innehåll skall implmenteras 
+senare när programmet är fungerande i övriga delar.
+--
+*Håller funktionerna (Methods) för daganteckningarna mm.*
+ </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>72</x>
+      <y>99</y>
+      <w>423</w>
+      <h>81</h>
+    </coordinates>
+    <panel_attributes>/diaryapp::DiaryGUIApp/
+--
+--
++main(String[] args): void
+--
+*Program start*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>711</x>
+      <y>270</y>
+      <w>27</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+</diagram>
