@@ -16,77 +16,24 @@ import diaryapp.DiaryWinGUI;
 public class DiaryLibrary implements Library<Diary> {
 
 	int maxItemID = 1;
-	static List<Diary> diaryList;
+	public static List<Diary> diaryList = new ArrayList<>();
 	static String filename = "";
+	static String currentOpenDay = "";
 
 	/**
-	 * Tillsammans med Partslibrary : skapar en array av 'partslist'
+	 * Constructor DiaryLibrary Tillsammans med Partslibrary : skapar en array
+	 * av 'partslist'
 	 */
 	public DiaryLibrary() {
-		diaryList = new ArrayList<>();
 	}
 
 	// "Reset" ?
-	// public static String saveAction() {
-	// DiaryWinGUI.
-	// return filename;
-	// }
 
 	// "Search" Search Diary
 
-	// "Open" Open/Edit diary post
-	@Override
-	public String openDiary(String filename) {
-		String returMessage = "";
-		try {
-			File myObj = new File(filename);
-			@SuppressWarnings("resource")
-			Scanner myReader = new Scanner(myObj);
-
-			List<Diary> fileInput = new ArrayList<>();
-
-			while (myReader.hasNextLine()) {
-				String data = myReader.nextLine();
-				// System.out.format(" %s\n", data);
-				/**
-				 * Parse data from filename to partslist
-				 */
-				String onePart = data.substring(data.indexOf('[') + 1,
-						data.indexOf(']') + 1);
-				String[] parts = onePart.split("=");
-				String date = parts[1].substring(0, parts[1].indexOf(", Path"));
-				String path = parts[2].substring(0,
-						parts[2].indexOf(", Status"));
-				String status = parts[3];
-
-				// Clean and det values to variables
-				date = date.strip();
-				path = path.strip();
-				status = status.strip();
-
-				int stat = Integer.parseInt(status);
-				// Keep track on highest uniqID(itemId) value
-				// if (itemId > maxItemID) {
-				// maxItemID = itemId;
-				fileInput.add(new Diary(date, path, stat));
-				returMessage = "   DAGBOK DATABAS LADDAD";
-			}
-			// partsList = fileInput;
-
-			// System.out.println(
-			// " ======================== Info Parts Library
-			// ========================");
-			// System.out.println(" File name: " + myObj.getName());
-			// System.out.println(" Absolute path: \n " +
-			// myObj.getAbsolutePath());
-			// System.out.println(" File size in bytes " + myObj.length());
-			// System.out.println(
-			// "=====================================================================");
-		} catch (FileNotFoundException err) {
-			returMessage = "   ETT FEL INTRÄFFADE";
-			err.printStackTrace();
-		}
-		return returMessage;
+	static public String loadDiary() {
+		// String returMessage = "";
+		return readItems("diarylist.txt");
 	}
 
 	static public String openTheDay(String filename) {
@@ -125,15 +72,16 @@ public class DiaryLibrary implements Library<Diary> {
 		}
 
 	}
+
 	static public String currentDay() {
 		String year = Diary.getYear();
 		String month = Diary.getMonth();
-		String name = Diary.getDate();
+		String name = Diary.getTodaysDate();
 		filename = String.format(".\\%s\\%s\\%s.txt", year, month, name);
 		return filename;
 	}
 
-	public boolean addItem(Diary item) {
+	public static boolean addItem(Diary item) {
 		diaryList.add(item);
 		return true;
 	}
@@ -145,10 +93,13 @@ public class DiaryLibrary implements Library<Diary> {
 				.ofPattern("yyyy-MM-dd kk.mm:");
 		String stamp = myDateObj.format(myFormatDate);
 		return stamp;
+
 	}
 
 	// "Save" Save Diary
 	static public void saveTheDay(String filename) {
+
+		// Sparar textfilen YYMMDD.txt
 		String saveText = DiaryWinGUI.textArea.getText();
 		if (true) {
 			try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
@@ -158,6 +109,7 @@ public class DiaryLibrary implements Library<Diary> {
 				System.out.println("Skapa funktion som skapar nytt bibliotek");
 			}
 		}
+		// Lägg till kod för att spara databasfilen diarylist.txt
 		filename = "diarylist.txt";
 		try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
 			for (Diary savedDay : diaryList) {
@@ -179,8 +131,88 @@ public class DiaryLibrary implements Library<Diary> {
 
 	// "Exit"
 
+	public static String showDaysOnTextArea() {
+		StringBuilder returnText = new StringBuilder();
+		// Diary temp = new Diary("","",0);
+		for (Diary temp : diaryList) {
+			returnText.append(temp.dayToString());
+			System.out.println(returnText);
+			returnText.append("\n");
+		}
+		// System.out.println(returnText.toString());
+		return returnText.toString();
+	}
+
 	public static String getCurrentPath() {
-		return Diary.getPath();
+		return Diary.getCPath();
+	}
+
+	public static String readItems(String filename) {
+		// TODO Auto-generated method stub
+		String returMessage = "";
+		try {
+			File myObj = new File(filename);
+			@SuppressWarnings("resource")
+			Scanner myReader = new Scanner(myObj);
+			List<Diary> fileInput = new ArrayList<>();
+			while (myReader.hasNextLine()) {
+				String data = myReader.nextLine();
+				/**
+				 * Parse data from filename to partslist
+				 */
+				String onePart = data.substring(data.indexOf('[') + 1,
+						data.indexOf(']') + 1);
+				String[] parts = onePart.split("=");
+				String date = parts[1].substring(0, parts[1].indexOf(", Path"));
+				String path = parts[2].substring(0,
+						parts[2].indexOf(", Status"));
+				String status = parts[3].substring(0, parts[3].indexOf("]"));
+
+				// Clean and det values to variables
+				date = date.strip();
+				path = path.strip();
+				status = status.strip();
+
+				int stat = Integer.parseInt(status);
+				// Keep track on highest uniqID(itemId) value
+				// if (itemId > maxItemID) {
+				// maxItemID = itemId;
+				fileInput.add(new Diary(date, path, stat));
+
+				returMessage = "   DAGBOK DATABAS LADDAD";
+			}
+			diaryList = fileInput;
+			System.out.println(diaryList);
+			for (Diary temp : diaryList) {
+				System.out.println(temp.dayToString());
+			}
+			System.out.println(fileInput);
+			for (Diary temp : fileInput) {
+				System.out.println(temp.dayToString());
+			}
+		} catch (FileNotFoundException err) {
+			returMessage = "   ETT FEL INTRÄFFADE";
+			err.printStackTrace();
+		}
+		return returMessage;
+	}
+
+	@Override
+	public String showLibraryOnGUI() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void storeItems(String filename) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public String getPath() {
+		// TODO Auto-generated method stub
+
+		return null;
 	}
 
 }

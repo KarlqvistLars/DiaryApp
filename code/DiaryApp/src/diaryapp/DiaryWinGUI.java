@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -15,10 +16,10 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+import diary.Day;
 import diary.Diary;
 import diary.DiaryLibrary;
 import diary.Library;
-import diaryapp.DiaryWinGUI.AppActionListener.DialogBox;
 
 public class DiaryWinGUI extends JFrame {
 
@@ -32,7 +33,7 @@ public class DiaryWinGUI extends JFrame {
 	// Setup text fields
 	private JTextField textFieldSearch;
 	JTextField textChoice = new JTextField();
-	private JTextField textFieldHMIOutputText;
+	public static JTextField textFieldHMIOutputText = new JTextField();;
 	JFormattedTextField fromDateFormatted = new JFormattedTextField();
 	JFormattedTextField toDateFormatted = new JFormattedTextField();
 	public static JTextArea textArea = new JTextArea();
@@ -40,14 +41,23 @@ public class DiaryWinGUI extends JFrame {
 	static Boolean newDay = false;
 
 	// model reference
-	// Diary kanske bör ändras till FormFields
-	private Diary theModel;
+
+	// private Diary theModel;
+
+	@SuppressWarnings("unused")
+	private List<Diary> theModel;
+	Library<Diary> days = new DiaryLibrary();
+	String filename = "diarylist.txt";
 
 	/**
 	 * Create the application and initialize the contents of the frame.
 	 */
-	DiaryWinGUI(Diary model) {
+	DiaryWinGUI(List<Diary> model) {
 
+		// Programstart actions
+		textFieldHMIOutputText.setText(DiaryLibrary.readItems(filename));
+
+		// Är menad att hålla den öppna databasen i minnet.
 		theModel = model;
 
 		// Fonts
@@ -66,12 +76,14 @@ public class DiaryWinGUI extends JFrame {
 		JButton btnSearch = new JButton("Search");
 		btnSearch.setBounds(80, 5, 75, 30);
 		addButtonToFrame(btnSearch);
+
 		// Input field search text
 		textFieldSearch = new JTextField();
 		textFieldSearch.setBounds(160, 6, 270, 28);
 		frame.getContentPane().add(textFieldSearch);
 		textFieldSearch.setColumns(20);
 		Border border = textFieldSearch.getBorder();
+
 		// From Date
 		fromDateFormatted.setBounds(520, 6, 140, 28);
 		frame.getContentPane().add(fromDateFormatted);
@@ -80,7 +92,6 @@ public class DiaryWinGUI extends JFrame {
 		frame.getContentPane().add(toDateFormatted);
 
 		// Setting up the diary textArea
-
 		textArea.setFont(font2);
 		textArea.setBorder(border);
 		textArea.setBounds(80, 75, 795, 475);
@@ -160,10 +171,9 @@ public class DiaryWinGUI extends JFrame {
 	 * Inner class handling user interactions via buttons
 	 *
 	 */
-	class AppActionListener implements ActionListener {
+	public class AppActionListener implements ActionListener {
 
-		String filename = "dayslist.txt";
-		Library<Diary> diaryList = new DiaryLibrary();
+		// Library<Diary> diaryList = new DiaryLibrary();
 		DialogBox okPane = new DialogBox();
 		@Override
 		public void actionPerformed(ActionEvent ae) {
@@ -174,7 +184,7 @@ public class DiaryWinGUI extends JFrame {
 
 				case "Reset" :
 					newDay = false;
-					saveDay(okPane);
+					Day.saveDay(okPane);
 					if (textArea.getBackground() == Color.WHITE) {
 						textFieldHMIOutputText.setText("  ALLA FÄLT RENSAS");
 					}
@@ -192,6 +202,18 @@ public class DiaryWinGUI extends JFrame {
 					 * Sökningen skall gå att begränsa med från och till datum.
 					 * Söka efter sökord skall vara möjlig i textmassan.
 					 */
+					textArea.setBackground(Color.WHITE);
+					textArea.setEnabled(true);
+					// textArea.setText(filename);
+
+					textArea.setText(null);
+					textArea.append("\n DiaryLibrary daylist\n");
+					textArea.append(makeLine("_", 98) + "\n");
+					textArea.append(DiaryLibrary.showDaysOnTextArea());
+					// System.out.print(Library.showDaysOnTextArea());
+					textArea.append(makeLine("=", 98) + "\n");
+					// resetForm();
+
 					break;
 
 				case "Open" :
@@ -200,6 +222,9 @@ public class DiaryWinGUI extends JFrame {
 					 * Kontroll på om dagen existerar Kontroll på om det är
 					 * någon i arbetsytan som först behöver sparas. När alla
 					 * förusättingar är klara öppna önskat dokument.
+					 * 
+					 * Denna case sats öppnar enpart txt filen för angiven dag
+					 * den ändrar eller öppnar inte databasfilen diarylist.
 					 */
 					if (textChoice.getText() != "") {
 						textArea.setBackground(Color.WHITE);
@@ -216,19 +241,13 @@ public class DiaryWinGUI extends JFrame {
 
 				case "New" :
 					if (textArea.getBackground() != Color.WHITE) {
-						textArea.setBackground(Color.WHITE);
-						textArea.setEnabled(true);
+						Day.newDay();
+						// "Databas" funktionen
 						String year = DiaryLibrary.getCurrentDateTime();
 						String path = DiaryLibrary.getCurrentPath();
-						textFieldHMIOutputText
-								.setText("  NY DAG TILLAGD TILL DAGBOK");
 						Diary carpeDiem = new Diary(year, path, 0);
-						diaryList.addItem(carpeDiem);
-						textArea.setText("=== Dagboks anteckning ===\n");
-						textArea.append(DiaryLibrary.newDay());
+						DiaryLibrary.addItem(carpeDiem);
 						newDay = true;
-						textArea.append("\n");
-						textArea.requestFocus();
 					} else {
 						textFieldHMIOutputText
 								.setText("  ÅTERSTÄLL FÄLT FÖRST");
@@ -248,9 +267,7 @@ public class DiaryWinGUI extends JFrame {
 					break;
 
 				case "Save" :
-
-					saveDay(okPane);
-
+					Day.saveDay(okPane);
 					break;
 
 				case "Delete" :
@@ -281,7 +298,7 @@ public class DiaryWinGUI extends JFrame {
 		JFrame okBox;
 		JFrame helpBox;
 		public class DialogBox {
-			int OptionOkNoCancel() {
+			public int OptionOkNoCancel() {
 				okBox = new JFrame();
 				okBox.setLocationRelativeTo(frame);
 				okBox.setTitle("Spara");
@@ -326,39 +343,24 @@ public class DiaryWinGUI extends JFrame {
 		textArea.setBackground(Color.LIGHT_GRAY);
 	}
 
-	private void saveDay(DialogBox okPane) {
-		if (textArea.getBackground() == Color.WHITE) {
-			if (newDay == true) {
-				DiaryLibrary.saveTheDay(DiaryLibrary.currentDay());
-				textFieldHMIOutputText.setText("  DAG SPARAD TILL DAGBOK");
-				newDay = false;
-			} else {
-				textFieldHMIOutputText
-						.setText("  SPARA ÖPPEN DAGBOKS NOTERING?");
-				int val = okPane.OptionOkNoCancel();
-
-				if (val == 0) {
-					DiaryLibrary.saveTheDay(DiaryLibrary.currentDay());
-					textFieldHMIOutputText.setText("  DAG SPARAD TILL DAGBOK");
-					newDay = false;
-				} else {
-					textFieldHMIOutputText.setText("  DAGEN EJ SPARAD");
-					newDay = false;
-				}
-			}
-		}
-	}
-
 	/**
 	 * This method will read model attributes and force a visual update
 	 */
 	private void updateGUI() {
-		// textFieldSearch.setText(String.valueOf(theModel.toString()));
-		// textChoise.setText(String.valueOf(theModel.getPartNo()));
-		// textFieldHMIOutputText.setText(String.valueOf(theModel.getName()));
-		// fromDateFormatted.setText(String.valueOf(theModel.getWhereToBuy()));
-		// buyDateJTF.setText(String.valueOf(theModel.getBuyDate()));
-		// toDateFormatted.setText(String.valueOf(theModel.getPrice()));
+		textFieldSearch.setText(String.valueOf(textFieldSearch.getText()));
+		textChoice.setText(String.valueOf(textChoice.getText()));
+		textFieldHMIOutputText
+				.setText(String.valueOf(textFieldHMIOutputText.getText()));
+		fromDateFormatted.setText(String.valueOf(fromDateFormatted.getText()));
+		toDateFormatted.setText(String.valueOf(fromDateFormatted.getText()));
+	}
+	static String makeLine(String sign, int signCount) {
+		StringBuilder returnText = new StringBuilder();
+		returnText.append(" ");
+		for (int n = 0; n < signCount; n++) {
+			returnText.append(sign);
+		}
+		return returnText.toString();
 	}
 
 }

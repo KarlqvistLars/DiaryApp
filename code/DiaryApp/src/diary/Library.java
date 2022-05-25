@@ -1,5 +1,8 @@
 package diary;
 
+import java.util.Collections;
+import java.util.List;
+
 public interface Library<T> {
 
 	/**
@@ -9,7 +12,9 @@ public interface Library<T> {
 	 *            - Object of type T
 	 * @return returns boolean true if item is added.
 	 */
-	boolean addItem(T item);
+	static boolean addItem(Diary item) {
+		return false;
+	}
 
 	/**
 	 * Removes item or type Parts.
@@ -20,11 +25,70 @@ public interface Library<T> {
 	 */
 	boolean removeItem(T item);
 
-	public static String getPath() {
-		// TODO Auto-generated method stub
+	/**
+	 * Programstart - Read contents from file to library from databasefile
+	 * 'filename' partslibrarylist.txt.
+	 *
+	 * @param filename
+	 *            diarylist.txt Read contents from file to library from
+	 *            databasefile 'filename' diarylist.txt.
+	 *
+	 * @param filename
+	 *            diarylist.txt
+	 * @return
+	 */
+	public static String readItems(String filename) {
 		return null;
 	}
 
-	String openDiary(String filename);
+	public String getPath();
 
+	static String openDiary(String filename) {
+		return null;
+	}
+
+	static String showDaysOnTextArea() {
+		return null;
+	}
+	/**
+	 * Returns the number of items
+	 *
+	 * @return returns the number of items
+	 */
+	default int getNoOfItems() {
+		return 0;
+	}
+
+	default int getMaxItemID() {
+		return 0;
+	}
+
+	/**
+	 * Lists or displays the library contents on text Area
+	 */
+	String showLibraryOnGUI();
+
+	/**
+	 * GUI button "save" - Writes content to the database file.
+	 *
+	 * @param filename
+	 *            - The file diarylist.txt
+	 */
+	void storeItems(String filename);
+
+	/**
+	 * Searches in the 'librarylist' list for the search string serachPattern
+	 *
+	 * @param searchPattern
+	 *            - The search string searchPattern is defined by user input.
+	 * @return Returns the searchResult list
+	 */
+
+	default List<T> searchItem(String searchPattern) {
+		return Collections.emptyList();
+	}
+
+	default T getItem(int itemId) {
+		return null;
+	}
 }
