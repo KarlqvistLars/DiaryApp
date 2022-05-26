@@ -6,4 +6,6 @@ Framtills idag kanske 20h?
 2022/05/12: 4h
 2022/05/22: 4h
 2022/05/24: 2h
-2022/05/25: 6h note: work on reduce the need of static methods
+2022/05/25: 7h note: work on reduce the need of static methods. Now fully functional version.
+==============
+Work hours:36h note: The first 20 hours are approx. Because it was built on a technuiqe learnt from ha assignment in AV20TR.
