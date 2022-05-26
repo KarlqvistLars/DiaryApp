@@ -131,6 +131,7 @@ public class Diary implements Comparable<Diary> {
 	}
 
 	public String dayToString() {
+		Date.substring(0, 8);
 		return String.format(" Diary [Date=%s, Path=%s, Status=%s]", Date, Path,
 				Status);
 	}

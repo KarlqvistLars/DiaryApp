@@ -76,6 +76,10 @@ public interface Library<T> {
 	 */
 	void storeItems(String filename);
 
+	default boolean existingDay(String searchPattern) {
+		return false;
+	}
+
 	/**
 	 * Searches in the 'librarylist' list for the search string serachPattern
 	 *
@@ -83,7 +87,6 @@ public interface Library<T> {
 	 *            - The search string searchPattern is defined by user input.
 	 * @return Returns the searchResult list
 	 */
-
 	default List<T> searchItem(String searchPattern) {
 		return Collections.emptyList();
 	}

@@ -2,16 +2,12 @@ package diary;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
-
-import diaryapp.DiaryWinGUI;
 
 public class DiaryLibrary implements Library<Diary> {
 
@@ -36,24 +32,25 @@ public class DiaryLibrary implements Library<Diary> {
 		return readItems("diarylist.txt");
 	}
 
+	// Open
 	static public String openTheDay(String filename) {
 		String dayText = "";
-		// System.out.println(filename);
+		System.out.println(filename);
 		try {
 			File myObj = new File(filename);
 			@SuppressWarnings("resource")
-			Scanner myReader = new Scanner(myObj);
-			while (myReader.hasNextLine()) {
-				String data = myReader.nextLine();
+			Scanner myOFReader = new Scanner(myObj);
+			while (myOFReader.hasNextLine()) {
+				String data = myOFReader.nextLine();
 				dayText = String.format("%s%s\n", dayText, data);
 			}
 		} catch (FileNotFoundException err) {
-			// err.printStackTrace();
+			err.printStackTrace();
 		}
-		// System.out.println(dayText);
+		System.out.print("Text: ");
+		System.out.println(dayText);
 		return dayText;
 	}
-
 	// "New"
 	public static String newDay() {
 		return getCurrentDateTime();
@@ -93,32 +90,17 @@ public class DiaryLibrary implements Library<Diary> {
 				.ofPattern("yyyy-MM-dd kk.mm:");
 		String stamp = myDateObj.format(myFormatDate);
 		return stamp;
-
 	}
 
-	// "Save" Save Diary
-	static public void saveTheDay(String filename) {
-
-		// Sparar textfilen YYMMDD.txt
-		String saveText = DiaryWinGUI.textArea.getText();
-		if (true) {
-			try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
-				pw.println(saveText);
-			} catch (IOException ioe) {
-				System.out.println("Exception occurred: " + ioe);
-				System.out.println("Skapa funktion som skapar nytt bibliotek");
-			}
-		}
-		// Lägg till kod för att spara databasfilen diarylist.txt
-		filename = "diarylist.txt";
-		try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
-			for (Diary savedDay : diaryList) {
-				pw.println(savedDay.dayToString());
-			}
-		} catch (IOException ioe) {
-			System.out.println("Exception occurred: " + ioe);
-		}
+	public static String getCurrentDate() {
+		LocalDateTime myDateObj = LocalDateTime.now();
+		DateTimeFormatter myFormatDate = DateTimeFormatter
+				.ofPattern("yyyyMMdd");
+		String currentDate = myDateObj.format(myFormatDate);
+		return currentDate;
 	}
+
+	// "Save" moved to CLASS Day.java
 
 	// "Delete" Delete post
 	@Override
@@ -215,4 +197,32 @@ public class DiaryLibrary implements Library<Diary> {
 		return null;
 	}
 
+	public boolean existingDay(String searchPattern) {
+		boolean check = false;
+		if (searchItem(searchPattern) != null) {
+			check = true;
+		}
+		return check;
+	}
+
+	public List<Diary> searchItem(String searchPattern) {
+		boolean ok = false;
+
+		List<Diary> searchResult = new ArrayList<>();
+
+		Iterator<Diary> iter = DiaryLibrary.diaryList.iterator();
+
+		while (iter.hasNext()) {
+			Diary temp = iter.next();
+			if (temp.toDate().contains(searchPattern)) {
+				searchResult.add(temp);
+				ok = true;
+			}
+		}
+		if (!ok) {
+			System.out.format(" '%s' not found\n", searchPattern);
+			searchResult = null;
+		}
+		return searchResult;
+	}
 }
