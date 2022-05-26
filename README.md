@@ -5,7 +5,7 @@ the code to full object oriented code so the vistors of this repository can see 
 I will do this on my spare time.</br></br>
 Status is: Realesed version 1.0.
 </br></br>
-The realesed versin is avalibel in directory.</br>
+The realesed version is avalibel in directory.</br>
 https://github.com/KarlqvistLars/DiaryApp/tree/develop/testRealese
 </br></br>
 ![alt text](/pics/diaryAppGUIv2.png)
