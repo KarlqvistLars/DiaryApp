@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
+import diaryapp.DiaryWinGUI;
+
 public class DiaryLibrary implements Library<Diary> {
 
 	int maxItemID = 1;
@@ -35,6 +37,9 @@ public class DiaryLibrary implements Library<Diary> {
 	// Open
 	static public String openTheDay(String filename) {
 		String dayText = "";
+
+		currentOpenDay = filename;
+		System.out.println("Dag:" + filename);
 		System.out.println(filename);
 		try {
 			File myObj = new File(filename);
@@ -53,7 +58,38 @@ public class DiaryLibrary implements Library<Diary> {
 	}
 	// "New"
 	public static String newDay() {
+		currentOpenDay = getCurrentDate();
+		DiaryWinGUI.textFieldSearch.setText(currentOpenDay);
 		return getCurrentDateTime();
+	}
+
+	public static String setCurrentOpenDay(String currentOpen) {
+		String year = "";
+		String month = "";
+		String name = "";
+		System.out.println(currentOpen);
+		if (currentOpen.length() == 8) {
+			System.out.println("1: längden var 8");
+			year = currentOpen.substring(0, 4);
+			month = currentOpen.substring(4, 6);
+			name = currentOpen.substring(0, 8);
+		} else if (currentOpen == "") {
+			System.out.println("2: längden var 0");
+			currentOpenDay = "";
+		} else {
+			System.out.println("3: längden var > 8");
+			year = currentOpen.substring(10, 14);
+			month = currentOpen.substring(14, 16);
+			name = currentOpen.substring(10, 18);
+		}
+		System.out.println("DEBUG: " + year + " " + month + " " + name + " "
+				+ currentOpen);
+		return currentOpenDay = String.format(".\\%s\\%s\\%s.txt", year, month,
+				name);
+	}
+
+	static public String currentOpenDay() {
+		return currentOpenDay;
 	}
 
 	public static String getInputFilePath(String filename) {
@@ -70,7 +106,7 @@ public class DiaryLibrary implements Library<Diary> {
 
 	}
 
-	static public String currentDay() {
+	static public String dayToday() {
 		String year = Diary.getYear();
 		String month = Diary.getMonth();
 		String name = Diary.getTodaysDate();
