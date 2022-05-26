@@ -25,7 +25,7 @@ vid programstart.
 *+openDiary(String filename): String*
 
 *+openTheDay(String filename): String*
-Öpnnar dag angiven i inputfält "textChoice"
+Öppnar dag angiven i inputfält "textChoice"
 *+newDay(): String*
 Skapar en ny dag mha CLASS Day?
 *+getInputFilePath(String filename): String*

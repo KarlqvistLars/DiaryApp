@@ -62,7 +62,6 @@ public class DiaryWinGUI extends JFrame {
 	 * Create the application and initialize the contents of the frame.
 	 */
 	DiaryWinGUI(List<Diary> model) {
-
 		// Programstart actions
 		String StartMessage = DiaryLibrary.readItems(filename);
 		textArea.setEnabled(false);
@@ -232,9 +231,9 @@ public class DiaryWinGUI extends JFrame {
 						textContainer.setEnabled(true);
 						textContainer.setText(null);
 						textContainer.append("\n DiaryLibrary daylist\n");
-						textContainer.append(makeLine("_", 98) + "\n");
+						textContainer.append(makeLine("_", 96) + "\n");
 						textContainer.append(DiaryLibrary.showDaysOnTextArea());
-						textContainer.append(makeLine("=", 98) + "\n");
+						textContainer.append(makeLine("=", 96) + "\n");
 						textFieldHMIOutputText.setText("  SÖKURVAL VISAS");
 						saveFlag = false;
 					} else {
