@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import diaryapp.DiaryWinGUI;
 import diaryapp.DiaryWinGUI.AppActionListener.DialogBox;
@@ -69,6 +72,15 @@ public class Day {
 				// Skapa en kontroll som ser om öppen dag sparas"
 				// DiaryLibrary.saveTheDay("./2022/05/20220520.txt");
 				DiaryLibrary.setCurrentOpenDay(DiaryLibrary.currentOpenDay());
+				try {
+					Path path = Paths.get(DiaryLibrary.getCurrentPath());
+					// java.nio.file.Files;
+					Files.createDirectories(path);
+					System.out.println("Directory is created!");
+				} catch (IOException e) {
+					System.err.println(
+							"Failed to create directory!" + e.getMessage());
+				}
 				saveTheDay(DiaryLibrary.currentOpenDay());
 				DiaryWinGUI.textFieldHMIOutputText
 						.setText("  DAG SPARAD TILL DAGBOK");

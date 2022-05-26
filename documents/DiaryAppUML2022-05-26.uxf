@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>9</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>9</x>
+      <y>198</y>
+      <w>405</w>
+      <h>747</h>
+    </coordinates>
+    <panel_attributes>userInterface.partsLibrary::PartsWinGUI
+--
+#textArea: JTextArea
+#textField: JTextField
+
+-serialVersionUID = 1L: long
+-showRemove = false: boolean
+-showSearch = false: boolean
+-showSave = false: boolean
+-showLoad = false: boolean
+
+-infoPanel = new JPanel(): JPanel
+-controlPanel = new JPanel(): JPanel
+-partsListPanel = new JPanel(): JPanel
+
+-itemIdJL = new JLabel("Id"): JLabel
+-partNoJL = new JLabel("Part no."): JLabel
+-descriptionJL = new JLabel("Description"): JLabel
+-whereToBuyJL = new JLabel("Supplier"): JLabel
+-buyDateJL = new JLabel("Date purchased"): JLabel
+-priceJL = new JLabel("Price"): JLabel
+
+-partNoJTF = new JTextField(): JTextField
+-descriptionJTF = new JTextField(): JTextField
+-whereToBuyJTF = new JTextField(): JTextField
+-buyDateJTF = new JTextField(): JTextField
+-priceJTF = new JTextField(): JTextField
+-listOfPatsJTF = new JTextField(): JTextField
+
+-resetJB = new JButton("Reset"): JButton
+-showListJB = new JButton("Show"): JButton
+-addJB = new JButton("Add"): JButton
+-removeJB = new JButton("Remove"): JButton
+-searchJB = new JButton("Search"): JButton
+-storeJB = new JButton("Store"): JButton
+-loadJB = new JButton("Load"): JButton
+-exitJB = new JButton("Exit"): JButton
+
+-boldFont = new Font(Font.SANS_SERIF, Font.BOLD, 16): Font
+-consoleFont = new Font(Font.MONOSPACED, Font.BOLD, 16): Font
+
+-theModel: Parts
+~parts = new PartsLibrary(): Library&lt;Parts&gt;
+--
++PartsWinGUI(Parts model): ctor
++addTextFieldToInfoPanel(JTextField textField): void
++addButtonToControlPanel(JButton button): void
+-updateGUI(): void
+-resetForm(): void
+~makeLine(String sign, int signCount): String
+
+~populateLibrary(Library&lt;Parts&gt; lib): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>432</x>
+      <y>423</y>
+      <w>405</w>
+      <h>477</h>
+    </coordinates>
+    <panel_attributes>partsLibrary::Parts
+--
+-itemId = 1: int
+-partNo: int
+-name: String
+-whereToBuy: String
+-buyDate: String
+-price: float
+-stored: int
++uniqId = 1: int
++toStringNoID: Object
++maxItem = 0: int
+--
++Parts(int itemId, int partNo, String name, String whereToBuy,
+String buyDate, float price, int stored): ctor
+
++getUniqId(): int
++setUniqId(int val): void
++getMaxItem(): int
++setMaxItem(int val): void
++getItemId(): int
++setItemId(int itemId): void
++getPartNo(): int
++getName(): String
++getWhereToBuy(): String
++getBuyDate(): String
++getPrice(): float
++toString(): String
++toRemove(): String
++toPrint(): String
++compareTo(Parts o): int
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>432</x>
+      <y>36</y>
+      <w>405</w>
+      <h>369</h>
+    </coordinates>
+    <panel_attributes>partsLibrary::PartsLibrary
+--
+~maxItemID = 1: int
+-partsList: List&lt;Parts&gt;
+--
++PartsLibrary(): ctor
+
++showLibraryContents(): void
++showLibraryRowToRemove(): void
++showLibraryOnTextConsole(): void
++showLibraryOnGUIConsole(): String
++showRowToRemoveOnGUI(): String
+
++addItem(Parts item): boolean
++removeItem(Parts item): boolean
++searchItem(String searchPattern): List&lt;Parts&gt;
++storeItems(String filename): void
++readItems(String filename): void
++storeItemsAsCSV(String filename): void
+
++getNoOfItems(): int
++getMaxItemID(): int
++getItem(int itemId): Parts
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>855</x>
+      <y>36</y>
+      <w>342</w>
+      <h>369</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+partsLibrary::Library
+--
+--
+~addItem(T item): boolean
+~removeItem(T item): boolean
+~getNoOfItems(): int
+~getMaxItemID(): int
+
+~showLibraryContents(): void
+~showLibraryRowToRemove(): void
+~showLibraryOnTextConsole(): void
+~showLibraryOnGUIConsole(): String
+~showRowToRemoveOnGUI(): String
+
+~storeItems(String filename): void
+~readItems(String filename): void
+~storeItemsAsCSV(String filename): void
+~searchItem(String searchPattern): List&lt;T&gt;
+~getItem(int itemId): T
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>9</x>
+      <y>36</y>
+      <w>405</w>
+      <h>81</h>
+    </coordinates>
+    <panel_attributes>userInterface.partsLibrary::PartsLibraryApp
+--
+--
++main(String[] args): void
+~populateLibrary(Library&lt;Parts&gt; lib): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>9</x>
+      <y>126</y>
+      <w>405</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>/userInterface.partsLibrary::PartsLibaryGUIApp/
+--
+--
++main(String[] args): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
