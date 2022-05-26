@@ -7,3 +7,4 @@ Framtills idag kanske 20h?
 2022/05/22: 4h
 2022/05/24: 2h
 2022/05/25: 6h note: work on reduce the need of static methods
+2022/05/25: 6h note: fixes on button logic regarding to error handling
