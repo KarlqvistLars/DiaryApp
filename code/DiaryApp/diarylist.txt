@@ -8,4 +8,4 @@
  Diary [Date=20220522, Path=./2022/05/, Status=0]
  Diary [Date=20220524, Path=./2022/05/, Status=0]
  Diary [Date=20220525, Path=./2022/05/, Status=0]
- Diary [Date=2022-05-25 21.58:, Path=./2022/05/, Status=0]
+ Diary [Date=20220526, Path=./2022/05/, Status=0]

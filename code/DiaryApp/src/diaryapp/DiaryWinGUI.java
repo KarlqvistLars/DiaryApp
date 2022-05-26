@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -39,6 +41,8 @@ public class DiaryWinGUI extends JFrame {
 	public static JTextArea textArea = new JTextArea();
 	// Setup handling flags
 	static Boolean newDay = false;
+	Boolean dayLoaded = false;
+	Boolean saveFlag = false;
 
 	// model reference
 
@@ -55,7 +59,7 @@ public class DiaryWinGUI extends JFrame {
 	DiaryWinGUI(List<Diary> model) {
 
 		// Programstart actions
-		textFieldHMIOutputText.setText(DiaryLibrary.readItems(filename));
+		String StartMessage = DiaryLibrary.readItems(filename);
 
 		// Är menad att hålla den öppna databasen i minnet.
 		theModel = model;
@@ -106,6 +110,7 @@ public class DiaryWinGUI extends JFrame {
 		textChoice.setColumns(20);
 		textChoice.setBounds(6, 41, 150, 28);
 		frame.getContentPane().add(textChoice);
+		// textChoice.setText(" ");
 
 		// Setting up Output INFO panel
 		textFieldHMIOutputText = new JTextField();
@@ -114,6 +119,7 @@ public class DiaryWinGUI extends JFrame {
 		textFieldHMIOutputText.setColumns(20);
 		textFieldHMIOutputText.setBounds(160, 41, 715, 28);
 		frame.getContentPane().add(textFieldHMIOutputText);
+		textFieldHMIOutputText.setText(StartMessage);
 
 		// Setting up GUI buttons
 		// Open
@@ -137,9 +143,9 @@ public class DiaryWinGUI extends JFrame {
 		btnSave.setBounds(5, 180, 70, 30);
 		addButtonToFrame(btnSave);
 		// Delete
-		JButton btnDelete = new JButton("Delete");
-		btnDelete.setBounds(5, 215, 70, 30);
-		addButtonToFrame(btnDelete);
+		// JButton btnDelete = new JButton("Delete");
+		// btnDelete.setBounds(5, 215, 70, 30);
+		// addButtonToFrame(btnDelete);
 		// Help
 		JButton btnHelp = new JButton("Help");
 		btnHelp.setBounds(5, 485, 70, 30);
@@ -173,7 +179,6 @@ public class DiaryWinGUI extends JFrame {
 	 */
 	public class AppActionListener implements ActionListener {
 
-		// Library<Diary> diaryList = new DiaryLibrary();
 		DialogBox okPane = new DialogBox();
 		@Override
 		public void actionPerformed(ActionEvent ae) {
@@ -184,16 +189,19 @@ public class DiaryWinGUI extends JFrame {
 
 				case "Reset" :
 					newDay = false;
-					Day.saveDay(okPane);
+					if (saveFlag == true) {
+						Day.saveDay(okPane);
+					}
 					if (textArea.getBackground() == Color.WHITE) {
 						textFieldHMIOutputText.setText("  ALLA FÄLT RENSAS");
 					}
 					textArea.setEnabled(false);
 					resetForm();
+					dayLoaded = false;
+					saveFlag = false;
 					break;
 
 				case "Search" :
-					// Denna funk implementeras senare.
 					/**
 					 * Pseudokod här: Steg 1: Sökning skall vara möjlig att göra
 					 * i den textbaserad databasfilen. Steg 2: Sökning bör vara
@@ -204,16 +212,13 @@ public class DiaryWinGUI extends JFrame {
 					 */
 					textArea.setBackground(Color.WHITE);
 					textArea.setEnabled(true);
-					// textArea.setText(filename);
-
 					textArea.setText(null);
 					textArea.append("\n DiaryLibrary daylist\n");
 					textArea.append(makeLine("_", 98) + "\n");
 					textArea.append(DiaryLibrary.showDaysOnTextArea());
-					// System.out.print(Library.showDaysOnTextArea());
 					textArea.append(makeLine("=", 98) + "\n");
-					// resetForm();
-
+					textFieldHMIOutputText.setText("  SÖKURVAL VISAS");
+					saveFlag = false;
 					break;
 
 				case "Open" :
@@ -226,31 +231,60 @@ public class DiaryWinGUI extends JFrame {
 					 * Denna case sats öppnar enpart txt filen för angiven dag
 					 * den ändrar eller öppnar inte databasfilen diarylist.
 					 */
-					if (textChoice.getText() != "") {
-						textArea.setBackground(Color.WHITE);
-						textArea.setEnabled(true);
-						filename = DiaryLibrary
-								.getInputFilePath(textChoice.getText());
-						textArea.setText(DiaryLibrary.openTheDay(filename));
-						textFieldHMIOutputText.setText(String.format(
-								"  DAG %s ÖPPNAS", textChoice.getText()));
+
+					if (dayLoaded == false) {
+						if (textChoice.getSelectionEnd() > 7) {
+							// DiaryLibrary.readItems(filename);
+							if (existingDay(textChoice.getText().trim())) {
+								textArea.setEnabled(true);
+								textArea.setBackground(Color.WHITE);
+								filename = DiaryLibrary
+										.getInputFilePath(textChoice.getText());
+								textArea.setText(
+										DiaryLibrary.openTheDay(filename));
+								textFieldHMIOutputText.setText(
+										String.format("  DAG %s ÖPPNAS",
+												textChoice.getText()));
+								dayLoaded = true;
+							} else {
+								textFieldHMIOutputText
+										.setText("  VALT DATUM SAKNAS");
+								dayLoaded = false;
+							}
+						} else {
+							textFieldHMIOutputText
+									.setText("  VAL AV DAG SAKNAS");
+							dayLoaded = false;
+						}
+						saveFlag = true;
 					} else {
-						textFieldHMIOutputText.setText("  VAL AV DAG SAKNAS");
+						textFieldHMIOutputText
+								.setText("  RESET DAG FÖRE NY KAN LADDAS");
+						dayLoaded = false;
 					}
 					break;
 
 				case "New" :
 					if (textArea.getBackground() != Color.WHITE) {
-						Day.newDay();
-						// "Databas" funktionen
-						String year = DiaryLibrary.getCurrentDateTime();
-						String path = DiaryLibrary.getCurrentPath();
-						Diary carpeDiem = new Diary(year, path, 0);
-						DiaryLibrary.addItem(carpeDiem);
-						newDay = true;
+						if (existingDay(DiaryLibrary.getCurrentDate()
+								.trim()) == false) {
+							Day.newDay();
+							// "Databas" funktionen
+							String year = DiaryLibrary.getCurrentDate();
+							String path = DiaryLibrary.getCurrentPath();
+							Diary carpeDiem = new Diary(year, path, 0);
+							DiaryLibrary.addItem(carpeDiem);
+							newDay = true;
+							saveFlag = true;
+						} else {
+							textFieldHMIOutputText.setText(
+									"  ANTECKNING FÖR IDAG HAR REDAN SKAPATS");
+							saveFlag = false;
+						}
 					} else {
 						textFieldHMIOutputText
-								.setText("  ÅTERSTÄLL FÄLT FÖRST");
+								.setText("  ÅTERSTÄLL FÖRE ÖPPNA NY DAG");
+						saveFlag = false;
 					}
 					break;
 
@@ -268,6 +302,7 @@ public class DiaryWinGUI extends JFrame {
 
 				case "Save" :
 					Day.saveDay(okPane);
+					saveFlag = false;
 					break;
 
 				case "Delete" :
@@ -282,6 +317,9 @@ public class DiaryWinGUI extends JFrame {
 					break;
 
 				case "Exit" :
+					if (saveFlag == true) {
+						Day.saveDay(okPane);
+					}
 					System.exit(0);
 					break;
 
@@ -348,12 +386,21 @@ public class DiaryWinGUI extends JFrame {
 	 */
 	private void updateGUI() {
 		textFieldSearch.setText(String.valueOf(textFieldSearch.getText()));
-		textChoice.setText(String.valueOf(textChoice.getText()));
+		// textChoice.setText(String.valueOf(textChoice.getText()));
 		textFieldHMIOutputText
 				.setText(String.valueOf(textFieldHMIOutputText.getText()));
 		fromDateFormatted.setText(String.valueOf(fromDateFormatted.getText()));
 		toDateFormatted.setText(String.valueOf(fromDateFormatted.getText()));
 	}
+	/**
+	 * This Method is for making horisontal lines in the GUI textArea
+	 * 
+	 * @param sign
+	 *            The char caracter to make the line with (*,-,_,= osv.)
+	 * @param signCount
+	 *            The number of caracters that will make the line.
+	 * @return The textstring that represent the line.
+	 */
 	static String makeLine(String sign, int signCount) {
 		StringBuilder returnText = new StringBuilder();
 		returnText.append(" ");
@@ -361,6 +408,36 @@ public class DiaryWinGUI extends JFrame {
 			returnText.append(sign);
 		}
 		return returnText.toString();
+	}
+
+	public boolean existingDay(String searchPattern) {
+		boolean check = true;
+		if (searchItem(searchPattern) == null) {
+			check = false;
+		}
+		System.out.println(check);
+		return check;
+	}
+
+	private List<Diary> searchItem(String searchPattern) {
+		boolean ok = false;
+
+		List<Diary> searchResult = new ArrayList<>();
+
+		Iterator<Diary> iter = DiaryLibrary.diaryList.iterator();
+
+		while (iter.hasNext()) {
+			Diary temp = iter.next();
+			if (temp.toDate().contains(searchPattern)) {
+				searchResult.add(temp);
+				ok = true;
+			}
+		}
+		if (!ok) {
+			System.out.format(" '%s' not found\n", searchPattern);
+			searchResult = null;
+		}
+		return searchResult;
 	}
 
 }
