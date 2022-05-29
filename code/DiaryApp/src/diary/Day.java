@@ -14,9 +14,7 @@ import diaryapp.DiaryWinGUI.AppActionListener.DialogBox;
 public class Day {
 	/**
 	 * Constructor behövs det? public class Day() { }
-	 */
-	static Boolean newDay = false;
-	/**
+	 *
 	 * Pseudokod här: För att öppna behövs input av dag. Kontroll på om dagen
 	 * existerar Kontroll på om det är någon i arbetsytan som först behöver
 	 * sparas. När alla förusättingar är klara öppna önskat dokument.
@@ -28,21 +26,20 @@ public class Day {
 	 * @return
 	 */
 	public static boolean openDay(String day) {
-		// kod för att ladda dag
+		// kod för att ladda dagen (day= YYYYMMDD) angiven i textChoice.
 		DiaryWinGUI.textArea.setEnabled(true);
 		DiaryWinGUI.textArea.setBackground(Color.WHITE);
 		DiaryWinGUI.textContainer.setEnabled(true);
 		DiaryWinGUI.textContainer.setBackground(Color.WHITE);
 		day = DiaryLibrary.getInputFilePath(DiaryWinGUI.textChoice.getText());
 		DiaryLibrary.setCurrentOpenDay(day);
-		DiaryWinGUI.textFieldSearch.setText(DiaryLibrary.currentOpenDay);
 		DiaryWinGUI.textContainer.setText(DiaryLibrary.openTheDay(day));
 		DiaryWinGUI.textFieldHMIOutputText.setText(String
 				.format("  DAG %s ÖPPNAS", DiaryWinGUI.textChoice.getText()));
 		return true;
 	}
 	/**
-	 * 
+	 * Tillsvidare tom flytta kod från
 	 */
 	public static boolean newDay() {
 		// Texthantering av textArea
@@ -74,9 +71,8 @@ public class Day {
 				DiaryLibrary.setCurrentOpenDay(DiaryLibrary.currentOpenDay());
 				try {
 					Path path = Paths.get(DiaryLibrary.getCurrentPath());
-					// java.nio.file.Files;
 					Files.createDirectories(path);
-					System.out.println("Directory is created!");
+					// System.out.println("Directory is created!");
 				} catch (IOException e) {
 					System.err.println(
 							"Failed to create directory!" + e.getMessage());
@@ -100,8 +96,6 @@ public class Day {
 	 */
 	public static void saveTheDay(String filename) {
 		// Sparar textfilen YYMMDD.txt
-		System.out
-				.println("Path= " + filename + " Length= " + filename.length());
 		if (filename.length() == 9) {
 			filename = DiaryLibrary.setCurrentOpenDay(filename);
 		} else {
@@ -109,12 +103,11 @@ public class Day {
 					.setText("   ETT FEL HAR INTRÄFFAT");
 		}
 		String saveText = DiaryWinGUI.textContainer.getText();
-		if (true) {
+		if (true) { // Hitta villkor ifall biblioteket behöver skapas?
 			try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
 				pw.println(saveText);
 			} catch (IOException ioe) {
 				System.out.println("Exception occurred: " + ioe);
-				System.out.println("Skapa funktion som skapar nytt bibliotek");
 			}
 		}
 		// Lägg till kod för att spara databasfilen diarylist.txt
