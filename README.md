@@ -4,7 +4,6 @@ The plan for this projekt is to first just create a working version of the progr
 the code to full object oriented code so the vistors of this repository can see and follow the progress of the programming work. 
 I will do this on my spare time.</br></br>
 # Status is: Realesed version 1.1.
-</br></br>
 The realesed version is avalibel in directory.</br>
 https://github.com/KarlqvistLars/DiaryApp/tree/main/testRealese
 </br></br>
