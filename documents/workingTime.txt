@@ -8,5 +8,6 @@ Framtills idag kanske 20h?
 2022/05/24: 2h
 2022/05/25: 6h note: fixes on button logic regarding to error handling
 2022/05/26: 8h note: work on reduce the need of static methods. Now fully functional version.
+2022/05/29: 4h note: bug fixes and manual editied.
 ==============
-Work hours:56h note: The first 20 hours are approx. Because it was built on a technuiqe learnt from ha assignment in AV20TR.
+Work hours:60h note: The first 20 hours are approx. Because it was built on a technique learnt from an assignment in AV20TR.
