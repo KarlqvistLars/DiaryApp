@@ -43,7 +43,6 @@ public class Diary implements Comparable<Diary> {
 		Date = myDateObj.format(myFormatDate);
 		Path = myDateObj.format(myFormatPath);
 		Status = 0;
-		// return null;
 	}
 
 	/**

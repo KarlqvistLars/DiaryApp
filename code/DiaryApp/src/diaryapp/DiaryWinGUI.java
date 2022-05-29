@@ -198,7 +198,7 @@ public class DiaryWinGUI extends JFrame {
 
 			switch (trigger.getText()) {
 				case "Reset" :
-					System.out.println("DEBUG: Reset");
+					// System.out.println("DEBUG: Reset");
 					newDay = false;
 					if (saveFlag == true && serchActive == false) {
 						Day.saveDay(okPane);
@@ -214,7 +214,7 @@ public class DiaryWinGUI extends JFrame {
 					break;
 
 				case "Search" :
-					System.out.println("DEBUG: Search");
+					// System.out.println("DEBUG: Search");
 					/**
 					 * Pseudokod här: Steg 1: Sökning skall vara möjlig att göra
 					 * i den textbaserad databasfilen. Steg 2: Sökning bör vara
@@ -238,12 +238,23 @@ public class DiaryWinGUI extends JFrame {
 						saveFlag = false;
 					} else {
 						Day.saveDay(okPane);
+						textArea.setBackground(Color.WHITE);
+						textArea.setEnabled(true);
+						textContainer.setBackground(Color.WHITE);
+						textContainer.setEnabled(true);
+						textContainer.setText(null);
+						textContainer.append("\n DiaryLibrary daylist\n");
+						textContainer.append(makeLine("_", 96) + "\n");
+						textContainer.append(DiaryLibrary.showDaysOnTextArea());
+						textContainer.append(makeLine("=", 96) + "\n");
+						textFieldHMIOutputText.setText("  SÖKURVAL VISAS");
+						dayLoaded = false;
 						saveFlag = false;
 					}
 					break;
 
 				case "Open" :
-					System.out.println("DEBUG: Open");
+					// System.out.println("DEBUG: Open");
 					if (dayLoaded == false) {
 						if (textChoice.getSelectionEnd() > 7) {
 							// DiaryLibrary.readItems(filename);
@@ -269,7 +280,7 @@ public class DiaryWinGUI extends JFrame {
 					}
 					break;
 				case "New" :
-					System.out.println("DEBUG: New");
+					// System.out.println("DEBUG: New");
 					if (textArea.getBackground() != Color.WHITE) {
 						if (existingDay(DiaryLibrary.getCurrentDate()
 								.trim()) == false) {
@@ -298,7 +309,7 @@ public class DiaryWinGUI extends JFrame {
 					break;
 
 				case "Time" :
-					System.out.println("DEBUG: Time");
+					// System.out.println("DEBUG: Time");
 					if (textArea.getBackground() == Color.WHITE
 							&& serchActive == false) {
 						textFieldHMIOutputText
@@ -312,7 +323,7 @@ public class DiaryWinGUI extends JFrame {
 					break;
 
 				case "Save" :
-					System.out.println("DEBUG: Save");
+					// System.out.println("DEBUG: Save");
 					if (serchActive == false && dayLoaded == true) {
 						Day.saveDay(okPane);
 						saveFlag = false;
@@ -333,7 +344,7 @@ public class DiaryWinGUI extends JFrame {
 					break;
 
 				case "Exit" :
-					System.out.println("DEBUG: Exit");
+					// System.out.println("DEBUG: Exit");
 					if (saveFlag == true) {
 						Day.saveDay(okPane);
 					}
@@ -345,13 +356,14 @@ public class DiaryWinGUI extends JFrame {
 			updateGUI();
 		}
 
-		// private void saveDay(DialogBox okPane) {
-		// // TODO Auto-generated method stub
-		//
-		// }
-
 		JFrame okBox;
 		JFrame helpBox;
+		/**
+		 * DialogBox
+		 * 
+		 * @author Lars
+		 *
+		 */
 		public class DialogBox {
 			public int OptionOkNoCancel() {
 				okBox = new JFrame();
@@ -387,14 +399,14 @@ public class DiaryWinGUI extends JFrame {
 	}
 
 	private void resetForm() {
-		toDateFormatted.setText(null);
 		if (textArea.getBackground() != Color.WHITE) {
 			textFieldHMIOutputText.setText(null);
 		}
 		textFieldSearch.setText(null);
-		textChoice.setText(null);
+		textChoice.setText(textChoice.getText());
 		textContainer.setText(null);
 		// textArea.setText(null);
+		toDateFormatted.setText(null);
 		fromDateFormatted.setText(null);
 		textContainer.setBackground(Color.LIGHT_GRAY);
 		textArea.setBackground(Color.LIGHT_GRAY);
@@ -404,12 +416,13 @@ public class DiaryWinGUI extends JFrame {
 	 * This method will read model attributes and force a visual update
 	 */
 	private void updateGUI() {
-		textFieldSearch.setText(String.valueOf(textFieldSearch.getText()));
-		// textChoice.setText(String.valueOf(textChoice.getText()));
+		textChoice.setText(String.valueOf(textChoice.getText()));
 		textFieldHMIOutputText
 				.setText(String.valueOf(textFieldHMIOutputText.getText()));
-		fromDateFormatted.setText(String.valueOf(fromDateFormatted.getText()));
-		toDateFormatted.setText(String.valueOf(fromDateFormatted.getText()));
+		textContainer.setText(String.valueOf(textContainer.getText()));
+		textFieldSearch.setText("N/A");
+		fromDateFormatted.setText("N/A");
+		toDateFormatted.setText("N/A");
 	}
 	/**
 	 * This Method is for making horisontal lines in the GUI textArea
@@ -434,17 +447,14 @@ public class DiaryWinGUI extends JFrame {
 		if (searchItem(searchPattern) == null) {
 			check = false;
 		}
-		System.out.println(check);
+		// System.out.println(check);
 		return check;
 	}
 
 	private List<Diary> searchItem(String searchPattern) {
 		boolean ok = false;
-
 		List<Diary> searchResult = new ArrayList<>();
-
 		Iterator<Diary> iter = DiaryLibrary.diaryList.iterator();
-
 		while (iter.hasNext()) {
 			Diary temp = iter.next();
 			if (temp.toDate().contains(searchPattern)) {
@@ -453,7 +463,7 @@ public class DiaryWinGUI extends JFrame {
 			}
 		}
 		if (!ok) {
-			System.out.format(" '%s' not found\n", searchPattern);
+			// System.out.format(" '%s' not found\n", searchPattern);
 			searchResult = null;
 		}
 		return searchResult;

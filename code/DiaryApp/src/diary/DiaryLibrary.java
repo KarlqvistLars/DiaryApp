@@ -30,17 +30,13 @@ public class DiaryLibrary implements Library<Diary> {
 	// "Search" Search Diary
 
 	static public String loadDiary() {
-		// String returMessage = "";
 		return readItems("diarylist.txt");
 	}
 
 	// Open
 	static public String openTheDay(String filename) {
 		String dayText = "";
-
 		currentOpenDay = filename;
-		System.out.println("Dag:" + filename);
-		System.out.println(filename);
 		try {
 			File myObj = new File(filename);
 			@SuppressWarnings("resource")
@@ -52,14 +48,11 @@ public class DiaryLibrary implements Library<Diary> {
 		} catch (FileNotFoundException err) {
 			err.printStackTrace();
 		}
-		System.out.print("Text: ");
-		System.out.println(dayText);
 		return dayText;
 	}
 	// "New"
 	public static String newDay() {
 		currentOpenDay = getCurrentDate();
-		DiaryWinGUI.textFieldSearch.setText(currentOpenDay);
 		return getCurrentDateTime();
 	}
 
@@ -67,23 +60,17 @@ public class DiaryLibrary implements Library<Diary> {
 		String year = "";
 		String month = "";
 		String name = "";
-		System.out.println(currentOpen);
 		if (currentOpen.length() == 8) {
-			System.out.println("1: längden var 8");
 			year = currentOpen.substring(0, 4);
 			month = currentOpen.substring(4, 6);
 			name = currentOpen.substring(0, 8);
 		} else if (currentOpen == "") {
-			System.out.println("2: längden var 0");
 			currentOpenDay = "";
 		} else {
-			System.out.println("3: längden var > 8");
 			year = currentOpen.substring(10, 14);
 			month = currentOpen.substring(14, 16);
 			name = currentOpen.substring(10, 18);
 		}
-		System.out.println("DEBUG: " + year + " " + month + " " + name + " "
-				+ currentOpen);
 		return currentOpenDay = String.format(".\\%s\\%s\\%s.txt", year, month,
 				name);
 	}
@@ -103,7 +90,6 @@ public class DiaryLibrary implements Library<Diary> {
 			System.out.println("Exception occurred: " + err);
 			return filename;
 		}
-
 	}
 
 	static public String dayToday() {
@@ -151,13 +137,10 @@ public class DiaryLibrary implements Library<Diary> {
 
 	public static String showDaysOnTextArea() {
 		StringBuilder returnText = new StringBuilder();
-		// Diary temp = new Diary("","",0);
 		for (Diary temp : diaryList) {
 			returnText.append(temp.dayToString());
-			System.out.println(returnText);
 			returnText.append("\n");
 		}
-		// System.out.println(returnText.toString());
 		return returnText.toString();
 	}
 
@@ -166,7 +149,6 @@ public class DiaryLibrary implements Library<Diary> {
 	}
 
 	public static String readItems(String filename) {
-		// TODO Auto-generated method stub
 		String returMessage = "";
 		try {
 			File myObj = new File(filename);
@@ -200,14 +182,6 @@ public class DiaryLibrary implements Library<Diary> {
 				returMessage = "   DAGBOK DATABAS LADDAD";
 			}
 			diaryList = fileInput;
-			System.out.println(diaryList);
-			for (Diary temp : diaryList) {
-				System.out.println(temp.dayToString());
-			}
-			System.out.println(fileInput);
-			for (Diary temp : fileInput) {
-				System.out.println(temp.dayToString());
-			}
 		} catch (FileNotFoundException err) {
 			returMessage = "   ETT FEL INTRÄFFADE";
 			err.printStackTrace();
@@ -243,11 +217,8 @@ public class DiaryLibrary implements Library<Diary> {
 
 	public List<Diary> searchItem(String searchPattern) {
 		boolean ok = false;
-
 		List<Diary> searchResult = new ArrayList<>();
-
 		Iterator<Diary> iter = DiaryLibrary.diaryList.iterator();
-
 		while (iter.hasNext()) {
 			Diary temp = iter.next();
 			if (temp.toDate().contains(searchPattern)) {
@@ -256,7 +227,9 @@ public class DiaryLibrary implements Library<Diary> {
 			}
 		}
 		if (!ok) {
-			System.out.format(" '%s' not found\n", searchPattern);
+			DiaryWinGUI.textFieldHMIOutputText.setText(
+					String.format("  DAG %s HITTADES INTE", searchPattern));
+			// System.out.format(" '%s' not found\n", searchPattern);
 			searchResult = null;
 		}
 		return searchResult;
