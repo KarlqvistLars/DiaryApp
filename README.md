@@ -6,6 +6,6 @@ I will do this on my spare time.</br></br>
 Status is: Realesed version 1.1.
 </br></br>
 The realesed version is avalibel in directory.</br>
-https://github.com/KarlqvistLars/DiaryApp/tree/develop/testRealese
+https://github.com/KarlqvistLars/DiaryApp/tree/main/testRealese
 </br></br>
 ![alt text](/pics/diaryAppGUIv2.png)
