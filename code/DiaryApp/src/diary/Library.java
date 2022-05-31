@@ -32,10 +32,7 @@ public interface Library<T> {
 	 * @param filename
 	 *            diarylist.txt Read contents from file to library from
 	 *            databasefile 'filename' diarylist.txt.
-	 *
-	 * @param filename
-	 *            diarylist.txt
-	 * @return
+	 * @return Interface protype. null
 	 */
 	public static String readItems(String filename) {
 		return null;
@@ -65,8 +62,12 @@ public interface Library<T> {
 
 	/**
 	 * Lists or displays the library contents on text Area
+	 * 
+	 * @return prototype null
 	 */
-	String showLibraryOnGUI();
+	default String showLibraryOnGUI() {
+		return null;
+	};
 
 	/**
 	 * GUI button "save" - Writes content to the database file.

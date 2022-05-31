@@ -9,21 +9,24 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import diaryapp.DiaryWinGUI;
-import diaryapp.DiaryWinGUI.AppActionListener.DialogBox;
 
 public class Day {
+	// /**
+	// * Constructor behövs det? public class Day() { }
+	// *
+	// * Pseudokod här: För att öppna behövs input av dag. Kontroll på om dagen
+	// * existerar Kontroll på om det är någon i arbetsytan som först behöver
+	// * sparas. När alla förusättingar är klara öppna önskat dokument.
+	// *
+	// * Denna case sats öppnar enpart txt filen för angiven dag den ändrar
+	// eller
+	// * öppnar inte databasfilen diarylist.
 	/**
-	 * Constructor behövs det? public class Day() { }
-	 *
-	 * Pseudokod här: För att öppna behövs input av dag. Kontroll på om dagen
-	 * existerar Kontroll på om det är någon i arbetsytan som först behöver
-	 * sparas. När alla förusättingar är klara öppna önskat dokument.
-	 * 
-	 * Denna case sats öppnar enpart txt filen för angiven dag den ändrar eller
-	 * öppnar inte databasfilen diarylist.
+	 * Method to open day.
 	 * 
 	 * @param day
-	 * @return
+	 *            To be opened (day= YYYYMMDD) insert date in frame textChoice.
+	 * @return If successful true
 	 */
 	public static boolean openDay(String day) {
 		// kod för att ladda dagen (day= YYYYMMDD) angiven i textChoice.
@@ -39,7 +42,9 @@ public class Day {
 		return true;
 	}
 	/**
-	 * Tillsvidare tom flytta kod från
+	 * Appends new day to textArea on GUI
+	 * 
+	 * @return Boolean true if succeful
 	 */
 	public static boolean newDay() {
 		// Texthantering av textArea
@@ -56,8 +61,9 @@ public class Day {
 	}
 	/**
 	 * 
-	 * @param day
-	 * @return
+	 * @param okPane
+	 *            Canvas for Dialogbox Yes/No/Cancel
+	 * @return Boolean true if succeful
 	 */
 	public static boolean saveDay(DialogBox okPane) {
 		// Implamentera controll på om katalog som skall sparas till existerar?
@@ -92,7 +98,7 @@ public class Day {
 	 * Saving actions to assist method saveDay()
 	 * 
 	 * @param filename
-	 *            Name of the day being saved. ex. 20220515-.txt
+	 *            Name of the day being saved. ex. 20220515.txt
 	 */
 	public static void saveTheDay(String filename) {
 		// Sparar textfilen YYMMDD.txt
@@ -125,7 +131,8 @@ public class Day {
 	 * Search method not yet implemented
 	 * 
 	 * @param day
-	 * @return
+	 *            Search for day?
+	 * @return If succeful true.
 	 */
 	public boolean searchDays(String day) {
 		// kod för att ladda dag

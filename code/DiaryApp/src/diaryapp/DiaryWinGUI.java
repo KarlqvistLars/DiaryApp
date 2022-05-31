@@ -13,13 +13,13 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import diary.Day;
+import diary.DialogBox;
 import diary.Diary;
 import diary.DiaryLibrary;
 import diary.Library;
@@ -32,9 +32,10 @@ public class DiaryWinGUI extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	// The window frame
-	public JFrame frame;
+	public static JFrame frame;
 	// Setup text fields
 	public static JTextField textFieldSearch = new JTextField();
+
 	public static JTextField textChoice = new JTextField();
 	public static JTextField textFieldHMIOutputText = new JTextField();;
 	JFormattedTextField fromDateFormatted = new JFormattedTextField();
@@ -50,7 +51,6 @@ public class DiaryWinGUI extends JFrame {
 	Boolean serchActive = false;
 
 	// model reference
-
 	// private Diary theModel;
 
 	@SuppressWarnings("unused")
@@ -71,6 +71,15 @@ public class DiaryWinGUI extends JFrame {
 		// Scrollable textArea
 		textArea.setVerticalScrollBarPolicy(
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		// ToolTipTexts för Fields
+		textFieldSearch.setToolTipText(
+				"Listar alla sparade dagboksanteckningar hittills.");
+		textContainer.setToolTipText(
+				"Textruta för anteckning samt listruta för dagar.");
+		textChoice.setToolTipText(
+				"Indatafält för önskat datum i formatet [YYYYMMDD].");
+		textFieldHMIOutputText.setToolTipText(
+				"Infofält för utförda kommado samt ev. felinformation");
 
 		// Är menad att hålla den öppna databasen i minnet.
 		theModel = model;
@@ -90,6 +99,8 @@ public class DiaryWinGUI extends JFrame {
 		// Define search button
 		JButton btnSearch = new JButton("Search");
 		btnSearch.setBounds(80, 5, 75, 30);
+		btnSearch.setToolTipText(
+				"Listar alla sparade dagboksanteckningar hittills.");
 		addButtonToFrame(btnSearch);
 
 		// Input field search text
@@ -136,34 +147,44 @@ public class DiaryWinGUI extends JFrame {
 		// Open
 		JButton btnOpen = new JButton("Open");
 		btnOpen.setBounds(5, 5, 70, 30);
+		btnOpen.setToolTipText(
+				"Öppnar dokument men hjälp av att man anger önskad dag att öppna i den vita rutan nedanför.");
 		addButtonToFrame(btnOpen);
 		// New
 		JButton btnNew = new JButton("New");
 		btnNew.setBounds(5, 75, 70, 30);
+		btnNew.setToolTipText(
+				"Skapar en ny anteckning för den aktuella dagen då den skapas.");
 		addButtonToFrame(btnNew);
 		// Reset
 		JButton btnReset = new JButton("Reset");
 		btnReset.setBounds(5, 110, 70, 30);
+		btnReset.setToolTipText("Tömmer alla fält på info.");
 		addButtonToFrame(btnReset);
 		// Time
 		JButton btnTimeSTamp = new JButton("Time");
 		btnTimeSTamp.setBounds(5, 145, 70, 30);
+		btnTimeSTamp.setToolTipText(
+				"Infogar en tidstämpel för den aktuella tiden och underlättar att avgränsa olika anteckningar och händelser.");
 		addButtonToFrame(btnTimeSTamp);
 		// Save
 		JButton btnSave = new JButton("Save");
 		btnSave.setBounds(5, 180, 70, 30);
+		btnSave.setToolTipText("Sparar öppen daganteckning.");
 		addButtonToFrame(btnSave);
 		// Delete
-		// JButton btnDelete = new JButton("Delete");
+		// JButton btnDelete = new JButton("Insert day");
 		// btnDelete.setBounds(5, 215, 70, 30);
 		// addButtonToFrame(btnDelete);
 		// Help
 		JButton btnHelp = new JButton("Help");
 		btnHelp.setBounds(5, 485, 70, 30);
+		btnHelp.setToolTipText("Info om appen.");
 		addButtonToFrame(btnHelp);
 		// Exit
 		JButton btnExit = new JButton("Exit");
 		btnExit.setBounds(5, 520, 70, 30);
+		btnExit.setToolTipText("Avsluta programmet.");
 		addButtonToFrame(btnExit);
 
 		// Setting up lables
@@ -176,7 +197,12 @@ public class DiaryWinGUI extends JFrame {
 		lblFromDate.setBounds(435, 5, 90, 30);
 		frame.getContentPane().add(lblFromDate);
 	}
-
+	/**
+	 * Method for adding new button to frame.
+	 * 
+	 * @param button
+	 *            Add button name to add button to frame.
+	 */
 	public void addButtonToFrame(JButton button) {
 		button.addActionListener(new AppActionListener());
 		button.setBackground(new Color(230, 230, 230));
@@ -350,42 +376,9 @@ public class DiaryWinGUI extends JFrame {
 					}
 					System.exit(0);
 					break;
-
 			}
 			// trigger update of the GUI when model has changed
 			updateGUI();
-		}
-
-		JFrame okBox;
-		JFrame helpBox;
-		/**
-		 * DialogBox
-		 * 
-		 * @author Lars
-		 *
-		 */
-		public class DialogBox {
-			public int OptionOkNoCancel() {
-				okBox = new JFrame();
-				okBox.setLocationRelativeTo(frame);
-				okBox.setTitle("Spara");
-				int t = JOptionPane.showConfirmDialog(okBox,
-						"Spara öppen dagboks notering? ");
-				return t;
-			}
-			void OptionHelp() {
-				helpBox = new JFrame();
-				helpBox.setLocationRelativeTo(frame);
-				helpBox.setTitle("Help");
-				JOptionPane.showMessageDialog(helpBox,
-						"Detta är ett dagboksprogram av Lars Karlqvist.\n"
-								+ "Det är ännu inte någon färdig programvara utan \n"
-								+ "en egen övning i java programmering.\n\n"
-								+ "Men ifall ni ändå tycker att denna lilla app har potential?\n"
-								+ "Kanske tycker till och med att den är så bra att ni har arbete att erbjuda mig?\n"
-								+ "Ja då är ni välkomna att höra av er till mig på min LinkedIN profil.\n\n"
-								+ "https://www.linkedin.com/in/lars-karlqvist-582b7a28/");
-			}
 		}
 	}
 
@@ -394,10 +387,11 @@ public class DiaryWinGUI extends JFrame {
 		format = parts[1];
 		String part[] = format.split("]");
 		format = part[0];
-		// TODO Auto-generated method stub
 		return format;
 	}
-
+	/**
+	 * Reset function for form.
+	 */
 	private void resetForm() {
 		if (textArea.getBackground() != Color.WHITE) {
 			textFieldHMIOutputText.setText(null);
@@ -411,7 +405,6 @@ public class DiaryWinGUI extends JFrame {
 		textContainer.setBackground(Color.LIGHT_GRAY);
 		textArea.setBackground(Color.LIGHT_GRAY);
 	}
-
 	/**
 	 * This method will read model attributes and force a visual update
 	 */
@@ -441,8 +434,12 @@ public class DiaryWinGUI extends JFrame {
 		}
 		return returnText.toString();
 	}
-
-	public boolean existingDay(String searchPattern) {
+	/**
+	 * 
+	 * @param searchPattern
+	 * @return
+	 */
+	private boolean existingDay(String searchPattern) {
 		boolean check = true;
 		if (searchItem(searchPattern) == null) {
 			check = false;
@@ -450,7 +447,11 @@ public class DiaryWinGUI extends JFrame {
 		// System.out.println(check);
 		return check;
 	}
-
+	/**
+	 * 
+	 * @param searchPattern
+	 * @return
+	 */
 	private List<Diary> searchItem(String searchPattern) {
 		boolean ok = false;
 		List<Diary> searchResult = new ArrayList<>();
