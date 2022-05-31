@@ -12,6 +12,7 @@ public abstract class DiaryGUIApp implements Library<DiaryLibrary> {
 
 	public static void main(String[] args) {
 		Runnable guiRun = new Runnable() {
+			@SuppressWarnings("static-access")
 			public void run() {
 				try {
 					List<Diary> model = new ArrayList<>();

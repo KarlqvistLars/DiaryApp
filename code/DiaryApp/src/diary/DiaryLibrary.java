@@ -5,30 +5,15 @@ import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
-import diaryapp.DiaryWinGUI;
-
 public class DiaryLibrary implements Library<Diary> {
-
 	int maxItemID = 1;
 	public static List<Diary> diaryList = new ArrayList<>();
 	static String filename = "";
 	static String currentOpenDay = "";
-
-	/**
-	 * Constructor DiaryLibrary Tillsammans med Partslibrary : skapar en array
-	 * av 'partslist'
-	 */
-	public DiaryLibrary() {
-	}
-
-	// "Reset" ?
-
-	// "Search" Search Diary
-
+	// Load diary databas at start
 	static public String loadDiary() {
 		return readItems("diarylist.txt");
 	}
@@ -55,7 +40,13 @@ public class DiaryLibrary implements Library<Diary> {
 		currentOpenDay = getCurrentDate();
 		return getCurrentDateTime();
 	}
-
+	/**
+	 * Parsing current open day to format ./Year/Month/YYYYMMDD.txt
+	 * 
+	 * @param currentOpen
+	 *            Date on the currently open day.
+	 * @return Value of currentOpenDay
+	 */
 	public static String setCurrentOpenDay(String currentOpen) {
 		String year = "";
 		String month = "";
@@ -74,11 +65,20 @@ public class DiaryLibrary implements Library<Diary> {
 		return currentOpenDay = String.format(".\\%s\\%s\\%s.txt", year, month,
 				name);
 	}
-
+	/**
+	 * Getter for current open day
+	 * 
+	 * @return current open day
+	 */
 	static public String currentOpenDay() {
 		return currentOpenDay;
 	}
-
+	/**
+	 * 
+	 * @param filename
+	 *            Input file name
+	 * @return Input filen path
+	 */
 	public static String getInputFilePath(String filename) {
 		try {
 			String year = "";
@@ -105,7 +105,11 @@ public class DiaryLibrary implements Library<Diary> {
 		return true;
 	}
 
-	// "Time" Put Time Stamp in text. Format:[ 2022-05-08 10.18:]
+	/**
+	 * Getter for current date time stamp just now.
+	 * 
+	 * @return String of timestamp in format (YYYY-MM-DD HH.MM:)
+	 */
 	public static String getCurrentDateTime() {
 		LocalDateTime myDateObj = LocalDateTime.now();
 		DateTimeFormatter myFormatDate = DateTimeFormatter
@@ -113,7 +117,11 @@ public class DiaryLibrary implements Library<Diary> {
 		String stamp = myDateObj.format(myFormatDate);
 		return stamp;
 	}
-
+	/**
+	 * Getter for current date just now.
+	 * 
+	 * @return String of timestamp in format (YYYYMMDD)
+	 */
 	public static String getCurrentDate() {
 		LocalDateTime myDateObj = LocalDateTime.now();
 		DateTimeFormatter myFormatDate = DateTimeFormatter
@@ -130,11 +138,14 @@ public class DiaryLibrary implements Library<Diary> {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 	// "Help"
 
 	// "Exit"
-
+	/**
+	 * List function to print search list to textArea.
+	 * 
+	 * @return String containing search result from diarylist.
+	 */
 	public static String showDaysOnTextArea() {
 		StringBuilder returnText = new StringBuilder();
 		for (Diary temp : diaryList) {
@@ -143,11 +154,22 @@ public class DiaryLibrary implements Library<Diary> {
 		}
 		return returnText.toString();
 	}
-
+	/**
+	 * Getter for current path now()
+	 * 
+	 * @return Path in format (./yyyy/MM/)
+	 */
 	public static String getCurrentPath() {
 		return Diary.getCPath();
 	}
-
+	/**
+	 * Reader for database file "filename" (diarylist.txt) Parsing functions.
+	 * 
+	 * @param filename
+	 *            Name on file to read content
+	 * @return "DAGBOK DATABAS LADDAD" if successful or "ETT FEL INTRÄFFADE" if
+	 *         file not found.
+	 */
 	public static String readItems(String filename) {
 		String returMessage = "";
 		try {
@@ -205,33 +227,5 @@ public class DiaryLibrary implements Library<Diary> {
 		// TODO Auto-generated method stub
 
 		return null;
-	}
-
-	public boolean existingDay(String searchPattern) {
-		boolean check = false;
-		if (searchItem(searchPattern) != null) {
-			check = true;
-		}
-		return check;
-	}
-
-	public List<Diary> searchItem(String searchPattern) {
-		boolean ok = false;
-		List<Diary> searchResult = new ArrayList<>();
-		Iterator<Diary> iter = DiaryLibrary.diaryList.iterator();
-		while (iter.hasNext()) {
-			Diary temp = iter.next();
-			if (temp.toDate().contains(searchPattern)) {
-				searchResult.add(temp);
-				ok = true;
-			}
-		}
-		if (!ok) {
-			DiaryWinGUI.textFieldHMIOutputText.setText(
-					String.format("  DAG %s HITTADES INTE", searchPattern));
-			// System.out.format(" '%s' not found\n", searchPattern);
-			searchResult = null;
-		}
-		return searchResult;
 	}
 }
