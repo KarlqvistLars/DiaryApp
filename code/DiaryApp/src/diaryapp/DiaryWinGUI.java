@@ -23,19 +23,16 @@ import diary.DialogBox;
 import diary.Diary;
 import diary.DiaryLibrary;
 import diary.Library;
+import diary.PathControl;
 
 public class DiaryWinGUI extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	// The window frame
 	public static JFrame frame;
 	// Setup text fields
 	public static JTextField textFieldSearch = new JTextField();
-
 	public static JTextField textChoice = new JTextField();
 	public static JTextField textFieldHMIOutputText = new JTextField();;
 	JFormattedTextField fromDateFormatted = new JFormattedTextField();
@@ -172,10 +169,12 @@ public class DiaryWinGUI extends JFrame {
 		btnSave.setBounds(5, 180, 70, 30);
 		btnSave.setToolTipText("Sparar öppen daganteckning.");
 		addButtonToFrame(btnSave);
-		// Delete
-		// JButton btnDelete = new JButton("Insert day");
-		// btnDelete.setBounds(5, 215, 70, 30);
-		// addButtonToFrame(btnDelete);
+		// Insert day
+		JButton btnInsert = new JButton("Insert");
+		btnInsert.setToolTipText(
+				"Infogar en dag med det datum som anges i [ Inmatningsfältet ].");
+		btnInsert.setBounds(5, 215, 70, 30);
+		addButtonToFrame(btnInsert);
 		// Help
 		JButton btnHelp = new JButton("Help");
 		btnHelp.setBounds(5, 485, 70, 30);
@@ -209,7 +208,6 @@ public class DiaryWinGUI extends JFrame {
 		button.setBorder(BorderFactory.createRaisedBevelBorder());
 		frame.getContentPane().add(button);
 	}
-
 	/**
 	 * Inner class handling user interactions via buttons
 	 *
@@ -219,9 +217,8 @@ public class DiaryWinGUI extends JFrame {
 		DialogBox okPane = new DialogBox();
 		@Override
 		public void actionPerformed(ActionEvent ae) {
-
 			JButton trigger = (JButton) ae.getSource();
-
+			textContainer.setLineWrap(true);
 			switch (trigger.getText()) {
 				case "Reset" :
 					// System.out.println("DEBUG: Reset");
@@ -231,7 +228,7 @@ public class DiaryWinGUI extends JFrame {
 					}
 					if (textArea.getBackground() == Color.WHITE) {
 						textFieldHMIOutputText.setText("  ALLA FÄLT RENSAS");
-						DiaryLibrary.setCurrentOpenDay("");
+						PathControl.setActiveDay("");
 					}
 					textArea.setEnabled(false);
 					resetForm();
@@ -251,28 +248,12 @@ public class DiaryWinGUI extends JFrame {
 					 */
 					if (dayLoaded == false) {
 						serchActive = true;
-						textArea.setBackground(Color.WHITE);
-						textArea.setEnabled(true);
-						textContainer.setBackground(Color.WHITE);
-						textContainer.setEnabled(true);
-						textContainer.setText(null);
-						textContainer.append("\n DiaryLibrary daylist\n");
-						textContainer.append(makeLine("_", 96) + "\n");
-						textContainer.append(DiaryLibrary.showDaysOnTextArea());
-						textContainer.append(makeLine("=", 96) + "\n");
+						DiaryLibrary.searchDiaryDays();
 						textFieldHMIOutputText.setText("  SÖKURVAL VISAS");
 						saveFlag = false;
 					} else {
 						Day.saveDay(okPane);
-						textArea.setBackground(Color.WHITE);
-						textArea.setEnabled(true);
-						textContainer.setBackground(Color.WHITE);
-						textContainer.setEnabled(true);
-						textContainer.setText(null);
-						textContainer.append("\n DiaryLibrary daylist\n");
-						textContainer.append(makeLine("_", 96) + "\n");
-						textContainer.append(DiaryLibrary.showDaysOnTextArea());
-						textContainer.append(makeLine("=", 96) + "\n");
+						DiaryLibrary.searchDiaryDays();
 						textFieldHMIOutputText.setText("  SÖKURVAL VISAS");
 						dayLoaded = false;
 						saveFlag = false;
@@ -315,9 +296,14 @@ public class DiaryWinGUI extends JFrame {
 							textArea.setEnabled(true);
 							textContainer.setBackground(Color.WHITE);
 							textContainer.setEnabled(true);
+
+							PathControl.setActiveDay(Diary.getTodaysDate());
+							// DiaryLibrary.newDay();
 							Day.newDay();
 							String year = DiaryLibrary.getCurrentDate();
-							String path = DiaryLibrary.getCurrentPath();
+							String path = PathControl.convertInputDateToPath(
+									DiaryLibrary.selectedDate);
+							textChoice.setText(DiaryLibrary.selectedDate);
 							Diary carpeDiem = new Diary(year, path, 0);
 							DiaryLibrary.addItem(carpeDiem);
 							dayLoaded = true;
@@ -338,13 +324,10 @@ public class DiaryWinGUI extends JFrame {
 					// System.out.println("DEBUG: Time");
 					if (textArea.getBackground() == Color.WHITE
 							&& serchActive == false) {
+						DiaryLibrary.insertTimeStamp(String
+								.format(DiaryLibrary.getCurrentDateTime()));
 						textFieldHMIOutputText
 								.setText("  TIDSSTÄMPEL INFOGAD I DAGBOK");
-						textContainer.append("\n");
-						textContainer.append(String
-								.format(DiaryLibrary.getCurrentDateTime()));
-						textContainer.append("\n");
-						textArea.requestFocus();
 					}
 					break;
 
@@ -358,8 +341,30 @@ public class DiaryWinGUI extends JFrame {
 					}
 					break;
 
-				case "Delete" :
-					// Denna funk implementeras senare.
+				case "Insert" :
+					// System.out.println("DEBUG: Insert day");
+					if (dayLoaded == false) {
+						if (textChoice.getText().length() > 7) {
+							// Kontroll ifall dag redan existerar
+							if (!existingDay(textChoice.getText().trim())) {
+								DiaryLibrary.insertDay();
+								dayLoaded = true;
+								saveFlag = true;
+								textFieldHMIOutputText
+										.setText("  ANTECKNING FÖR DAG "
+												+ textChoice.getText().trim()
+												+ " HAR " + "SKAPATS");
+							} else {
+								textFieldHMIOutputText.setText(
+										"  ANTECKNING FÖR IDAG HAR REDAN SKAPATS");
+								// saveFlag = false;
+							}
+						} else {
+							textFieldHMIOutputText
+									.setText("  INGEN GILTIG DAG");
+							// saveFlag = false;
+						}
+					}
 					break;
 
 				case "Help" :
@@ -381,7 +386,11 @@ public class DiaryWinGUI extends JFrame {
 			updateGUI();
 		}
 	}
-
+	/**
+	 * 
+	 * @param format
+	 * @return
+	 */
 	String parseString(String format) {
 		String parts[] = format.split("=");
 		format = parts[1];
@@ -410,29 +419,13 @@ public class DiaryWinGUI extends JFrame {
 	 */
 	private void updateGUI() {
 		textChoice.setText(String.valueOf(textChoice.getText()));
+		DiaryLibrary.selectedDate = textChoice.getText();
 		textFieldHMIOutputText
 				.setText(String.valueOf(textFieldHMIOutputText.getText()));
 		textContainer.setText(String.valueOf(textContainer.getText()));
 		textFieldSearch.setText("N/A");
 		fromDateFormatted.setText("N/A");
 		toDateFormatted.setText("N/A");
-	}
-	/**
-	 * This Method is for making horisontal lines in the GUI textArea
-	 * 
-	 * @param sign
-	 *            The char caracter to make the line with (*,-,_,= osv.)
-	 * @param signCount
-	 *            The number of caracters that will make the line.
-	 * @return The textstring that represent the line.
-	 */
-	static String makeLine(String sign, int signCount) {
-		StringBuilder returnText = new StringBuilder();
-		returnText.append(" ");
-		for (int n = 0; n < signCount; n++) {
-			returnText.append(sign);
-		}
-		return returnText.toString();
 	}
 	/**
 	 * 

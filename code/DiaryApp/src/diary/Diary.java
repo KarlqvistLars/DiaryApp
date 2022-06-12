@@ -52,8 +52,17 @@ public class Diary implements Comparable<Diary> {
 		return Path;
 	}
 
-	static public String getCPath() {
+	static public String getCPath(String insertDate) {
 		LocalDateTime myDateObj = LocalDateTime.now();
+		if (insertDate != "" || insertDate != null) {
+			int year = insertDate.indexOf(0, 3);
+			int month = insertDate.indexOf(4, 5);
+			int day = insertDate.indexOf(6, 7);
+			int hour = 12;
+			int min = 00;
+			// LocalDateTime.of(year, month, month, month, day)
+			myDateObj = LocalDateTime.of(year, month, day, hour, min);
+		}
 		DateTimeFormatter myFormatPath = DateTimeFormatter
 				.ofPattern("./yyyy/MM/");
 		cPath = myDateObj.format(myFormatPath);
@@ -92,11 +101,12 @@ public class Diary implements Comparable<Diary> {
 	 * 
 	 * @return String of current Year ex. "2022"
 	 */
-	static String getTodaysDate() {
+	public static String getTodaysDate() {
 		LocalDateTime myDateObj = LocalDateTime.now();
 		DateTimeFormatter myFormatDate = DateTimeFormatter
 				.ofPattern("yyyyMMdd");
-		return myDateObj.format(myFormatDate);
+		DiaryLibrary.selectedDate = myDateObj.format(myFormatDate);
+		return DiaryLibrary.selectedDate;
 	}
 
 	/**

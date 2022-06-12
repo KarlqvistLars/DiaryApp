@@ -11,16 +11,6 @@ import java.nio.file.Paths;
 import diaryapp.DiaryWinGUI;
 
 public class Day {
-	// /**
-	// * Constructor behövs det? public class Day() { }
-	// *
-	// * Pseudokod här: För att öppna behövs input av dag. Kontroll på om dagen
-	// * existerar Kontroll på om det är någon i arbetsytan som först behöver
-	// * sparas. När alla förusättingar är klara öppna önskat dokument.
-	// *
-	// * Denna case sats öppnar enpart txt filen för angiven dag den ändrar
-	// eller
-	// * öppnar inte databasfilen diarylist.
 	/**
 	 * Method to open day.
 	 * 
@@ -35,7 +25,7 @@ public class Day {
 		DiaryWinGUI.textContainer.setEnabled(true);
 		DiaryWinGUI.textContainer.setBackground(Color.WHITE);
 		day = DiaryLibrary.getInputFilePath(DiaryWinGUI.textChoice.getText());
-		DiaryLibrary.setCurrentOpenDay(day);
+		PathControl.setActiveDay(day);
 		DiaryWinGUI.textContainer.setText(DiaryLibrary.openTheDay(day));
 		DiaryWinGUI.textFieldHMIOutputText.setText(String
 				.format("  DAG %s ÖPPNAS", DiaryWinGUI.textChoice.getText()));
@@ -61,24 +51,57 @@ public class Day {
 	}
 	/**
 	 * 
+	 * @param dateInsert
+	 * @return
+	 */
+	public static boolean insertDay(String dateInsert) {
+		// Texthantering av textArea
+		DiaryWinGUI.textContainer.setText(null);
+		DiaryWinGUI.textArea.setBackground(Color.WHITE);
+		DiaryWinGUI.textArea.setEnabled(true);
+		DiaryWinGUI.textFieldHMIOutputText
+				.setText("  NY DAG TILLAGD TILL DAGBOK");
+		DiaryWinGUI.textContainer.setText("=== Dagboks anteckning ===\n");
+		String year = dateInsert.substring(0, 4);
+		String month = String.format("%2s", dateInsert.substring(4, 6))
+				.replace(' ', '0');
+		String day = String.format("%2s", dateInsert.substring(6, 8))
+				.replace(' ', '0');
+		DiaryWinGUI.textContainer
+				.append(String.format("%s-%s-%s 12.00:", year, month, day));
+		DiaryWinGUI.textContainer.append("\n");
+		DiaryWinGUI.textArea.requestFocus();
+		return true;
+	}
+
+	/**
+	 * 
 	 * @param okPane
 	 *            Canvas for Dialogbox Yes/No/Cancel
 	 * @return Boolean true if succeful
 	 */
 	public static boolean saveDay(DialogBox okPane) {
+		System.out.println("saveDay(DialogBox okPane)\n");
 		// Implamentera controll på om katalog som skall sparas till existerar?
 		if (DiaryWinGUI.textArea.getBackground() == Color.WHITE) {
+			System.out.println(
+					"if (DiaryWinGUI.textArea.getBackground() == Color.WHITE)\n");
 			DiaryWinGUI.textFieldHMIOutputText
 					.setText("  SPARA ÖPPEN DAGBOKS NOTERING?");
 			int val = okPane.OptionOkNoCancel();
 			if (val == 0) {
 				// Skapa en kontroll som ser om öppen dag sparas"
 				// DiaryLibrary.saveTheDay("./2022/05/20220520.txt");
-				DiaryLibrary.setCurrentOpenDay(DiaryLibrary.currentOpenDay());
+				System.out.println("if (val == 0)\n");
+				PathControl.setActiveDay(DiaryLibrary.currentOpenDay());
+				System.out.println("if (val == 0) efter setCurrentOpenDay\n");
+
 				try {
-					Path path = Paths.get(DiaryLibrary.getCurrentPath());
+
+					Path path = Paths.get(DiaryLibrary.currentOpenPath);
+
 					Files.createDirectories(path);
-					// System.out.println("Directory is created!");
+					System.out.println("Directory is created!" + path);
 				} catch (IOException e) {
 					System.err.println(
 							"Failed to create directory!" + e.getMessage());
@@ -90,7 +113,7 @@ public class Day {
 				DiaryWinGUI.textFieldHMIOutputText.setText("  DAGEN EJ SPARAD");
 			}
 		}
-		DiaryWinGUI.textFieldSearch.setText(DiaryLibrary.currentOpenDay);
+		DiaryWinGUI.textFieldSearch.setText(DiaryLibrary.currentOpenPath);
 		return true;
 	}
 
@@ -101,9 +124,13 @@ public class Day {
 	 *            Name of the day being saved. ex. 20220515.txt
 	 */
 	public static void saveTheDay(String filename) {
+		System.out.println("saveTheDay(String filename)");
 		// Sparar textfilen YYMMDD.txt
-		if (filename.length() == 9) {
-			filename = DiaryLibrary.setCurrentOpenDay(filename);
+		filename.trim();
+		if (filename.length() == 8) {
+			System.out.println("1." + filename);
+			PathControl.setActiveDay(filename);
+			System.out.println("2." + filename);
 		} else {
 			DiaryWinGUI.textFieldHMIOutputText
 					.setText("   ETT FEL HAR INTRÄFFAT");

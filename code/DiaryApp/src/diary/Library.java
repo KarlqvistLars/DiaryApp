@@ -17,15 +17,6 @@ public interface Library<T> {
 	}
 
 	/**
-	 * Removes item or type Parts.
-	 *
-	 * @param item
-	 *            - Object of type Parts.
-	 * @return returns boolean true if object is removed.
-	 */
-	boolean removeItem(T item);
-
-	/**
 	 * Programstart - Read contents from file to library from databasefile
 	 * 'filename' partslibrarylist.txt.
 	 *
@@ -37,8 +28,6 @@ public interface Library<T> {
 	public static String readItems(String filename) {
 		return null;
 	}
-
-	public String getPath();
 
 	static String openDiary(String filename) {
 		return null;
@@ -59,23 +48,6 @@ public interface Library<T> {
 	default int getMaxItemID() {
 		return 0;
 	}
-
-	/**
-	 * Lists or displays the library contents on text Area
-	 * 
-	 * @return prototype null
-	 */
-	default String showLibraryOnGUI() {
-		return null;
-	};
-
-	/**
-	 * GUI button "save" - Writes content to the database file.
-	 *
-	 * @param filename
-	 *            - The file diarylist.txt
-	 */
-	void storeItems(String filename);
 
 	default boolean existingDay(String searchPattern) {
 		return false;
