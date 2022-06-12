@@ -9,6 +9,8 @@ Framtills idag kanske 20h?
 2022/05/25: 6h note: fixes on button logic regarding to error handling
 2022/05/26: 8h note: work on reduce the need of static methods. Now fully functional version.
 2022/05/29: 4h note: bug fixes and manual editied.
-2022/06/04: ?h note: new class created to sort out different paths.
+2022/05/30: 2h note: test to implement insert day.
+2022/06/04: 2h note: new class created to sort out different paths.
+2022/06/10: 4h note: new feature "insert" made functional.
 ==============
 Work hours:60h note: The first 20 hours are approx. Because it was built on a technique learnt from an assignment in AV20TR.

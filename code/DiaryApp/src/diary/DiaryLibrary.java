@@ -1,5 +1,6 @@
 package diary;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
@@ -8,20 +9,39 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import diaryapp.DiaryWinGUI;
+
 public class DiaryLibrary implements Library<Diary> {
 	int maxItemID = 1;
 	public static List<Diary> diaryList = new ArrayList<>();
+	public static String selectedDate = "";
+	static String currentOpenPath = "";
+	static String currentOpenFile = "";
 	static String filename = "";
-	static String currentOpenDay = "";
+
 	// Load diary databas at start
 	static public String loadDiary() {
 		return readItems("diarylist.txt");
+	}
+	// Reset
+
+	// Search
+	static public void searchDiaryDays() {
+		DiaryWinGUI.textArea.setBackground(Color.WHITE);
+		DiaryWinGUI.textArea.setEnabled(true);
+		DiaryWinGUI.textContainer.setBackground(Color.WHITE);
+		DiaryWinGUI.textContainer.setEnabled(true);
+		DiaryWinGUI.textContainer.setText(null);
+		DiaryWinGUI.textContainer.append("\n DiaryLibrary daylist\n");
+		DiaryWinGUI.textContainer.append(makeLine("_", 96) + "\n");
+		DiaryWinGUI.textContainer.append(DiaryLibrary.showDaysOnTextArea());
+		DiaryWinGUI.textContainer.append(makeLine("=", 96) + "\n");
 	}
 
 	// Open
 	static public String openTheDay(String filename) {
 		String dayText = "";
-		currentOpenDay = filename;
+		currentOpenPath = filename;
 		try {
 			File myObj = new File(filename);
 			@SuppressWarnings("resource")
@@ -37,33 +57,60 @@ public class DiaryLibrary implements Library<Diary> {
 	}
 	// "New"
 	public static String newDay() {
-		currentOpenDay = getCurrentDate();
+		selectedDate = getCurrentDate();
+
 		return getCurrentDateTime();
 	}
+	// Insert
+	public static String insertDay() {
+		DiaryWinGUI.textArea.setBackground(Color.WHITE);
+		DiaryWinGUI.textArea.setEnabled(true);
+		DiaryWinGUI.textContainer.setBackground(Color.WHITE);
+		DiaryWinGUI.textContainer.setEnabled(true);
+
+		selectedDate = DiaryWinGUI.textChoice.getText().trim();
+		PathControl.setActiveDay(selectedDate);
+		String date = selectedDate;
+		String path = PathControl.convertInputDateToPath(selectedDate);
+		// Insert historic day not todays date.
+		Day.insertDay(selectedDate);
+		Diary carpeDiem = new Diary(date, path, 0);
+		DiaryLibrary.addItem(carpeDiem);
+		return null;
+	}
+
+	// Time
+	public static void insertTimeStamp(String timeStamp) {
+		DiaryWinGUI.textContainer.append("\n");
+		DiaryWinGUI.textContainer.append(timeStamp);
+		DiaryWinGUI.textContainer.append("\n");
+		DiaryWinGUI.textArea.requestFocus();
+	}
+
+	// "Save" moved to CLASS Day.java
+
+	// "Help"
+
+	// "Exit"
+
+	// Utilities
+
 	/**
-	 * Parsing current open day to format ./Year/Month/YYYYMMDD.txt
+	 * This Method is for making horisontal lines in the GUI textArea
 	 * 
-	 * @param currentOpen
-	 *            Date on the currently open day.
-	 * @return Value of currentOpenDay
+	 * @param sign
+	 *            The char caracter to make the line with (*,-,_,= osv.)
+	 * @param signCount
+	 *            The number of caracters that will make the line.
+	 * @return The textstring that represent the line.
 	 */
-	public static String setCurrentOpenDay(String currentOpen) {
-		String year = "";
-		String month = "";
-		String name = "";
-		if (currentOpen.length() == 8) {
-			year = currentOpen.substring(0, 4);
-			month = currentOpen.substring(4, 6);
-			name = currentOpen.substring(0, 8);
-		} else if (currentOpen == "") {
-			currentOpenDay = "";
-		} else {
-			year = currentOpen.substring(10, 14);
-			month = currentOpen.substring(14, 16);
-			name = currentOpen.substring(10, 18);
+	static String makeLine(String sign, int signCount) {
+		StringBuilder returnText = new StringBuilder();
+		returnText.append(" ");
+		for (int n = 0; n < signCount; n++) {
+			returnText.append(sign);
 		}
-		return currentOpenDay = String.format(".\\%s\\%s\\%s.txt", year, month,
-				name);
+		return returnText.toString();
 	}
 	/**
 	 * Getter for current open day
@@ -71,7 +118,8 @@ public class DiaryLibrary implements Library<Diary> {
 	 * @return current open day
 	 */
 	static public String currentOpenDay() {
-		return currentOpenDay;
+		currentOpenFile = PathControl.convertInputDateToFileName(selectedDate);
+		return currentOpenFile;
 	}
 	/**
 	 * 
@@ -104,17 +152,17 @@ public class DiaryLibrary implements Library<Diary> {
 		diaryList.add(item);
 		return true;
 	}
-
 	/**
 	 * Getter for current date time stamp just now.
 	 * 
 	 * @return String of timestamp in format (YYYY-MM-DD HH.MM:)
 	 */
 	public static String getCurrentDateTime() {
+		String stamp = "";
 		LocalDateTime myDateObj = LocalDateTime.now();
 		DateTimeFormatter myFormatDate = DateTimeFormatter
 				.ofPattern("yyyy-MM-dd kk.mm:");
-		String stamp = myDateObj.format(myFormatDate);
+		stamp = myDateObj.format(myFormatDate);
 		return stamp;
 	}
 	/**
@@ -123,24 +171,13 @@ public class DiaryLibrary implements Library<Diary> {
 	 * @return String of timestamp in format (YYYYMMDD)
 	 */
 	public static String getCurrentDate() {
+		String currentDate = "";
 		LocalDateTime myDateObj = LocalDateTime.now();
 		DateTimeFormatter myFormatDate = DateTimeFormatter
 				.ofPattern("yyyyMMdd");
-		String currentDate = myDateObj.format(myFormatDate);
+		currentDate = myDateObj.format(myFormatDate);
 		return currentDate;
 	}
-
-	// "Save" moved to CLASS Day.java
-
-	// "Delete" Delete post
-	@Override
-	public boolean removeItem(Diary item) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	// "Help"
-
-	// "Exit"
 	/**
 	 * List function to print search list to textArea.
 	 * 
@@ -159,9 +196,10 @@ public class DiaryLibrary implements Library<Diary> {
 	 * 
 	 * @return Path in format (./yyyy/MM/)
 	 */
-	public static String getCurrentPath() {
-		return Diary.getCPath();
-	}
+	// public static String getCurrentPath() {
+	// System.out.printf("Den aktulla datumen %s\n", selectedDate);
+	// return Diary.getCPath(selectedDate);
+	// }
 	/**
 	 * Reader for database file "filename" (diarylist.txt) Parsing functions.
 	 * 
@@ -209,23 +247,5 @@ public class DiaryLibrary implements Library<Diary> {
 			err.printStackTrace();
 		}
 		return returMessage;
-	}
-
-	@Override
-	public String showLibraryOnGUI() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void storeItems(String filename) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public String getPath() {
-		// TODO Auto-generated method stub
-
-		return null;
 	}
 }
