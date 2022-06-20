@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import diary.Diary;
-import diary.DiaryLibrary;
-import diary.Library;
+import diary.DiaryDB;
+import diary.DiaryDBInterface;
 
-public abstract class DiaryGUIApp implements Library<DiaryLibrary> {
+public abstract class DiaryGUIApp implements DiaryDBInterface<DiaryDB> {
 
 	public static void main(String[] args) {
 		Runnable guiRun = new Runnable() {

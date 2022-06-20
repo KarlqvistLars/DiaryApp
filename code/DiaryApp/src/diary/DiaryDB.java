@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 import diaryapp.DiaryWinGUI;
 
-public class DiaryLibrary implements Library<Diary> {
+public class DiaryDB implements DiaryDBInterface<Diary> {
 	int maxItemID = 1;
 	public static List<Diary> diaryList = new ArrayList<>();
 	public static String selectedDate = "";
@@ -34,7 +34,7 @@ public class DiaryLibrary implements Library<Diary> {
 		DiaryWinGUI.textContainer.setText(null);
 		DiaryWinGUI.textContainer.append("\n DiaryLibrary daylist\n");
 		DiaryWinGUI.textContainer.append(makeLine("_", 96) + "\n");
-		DiaryWinGUI.textContainer.append(DiaryLibrary.showDaysOnTextArea());
+		DiaryWinGUI.textContainer.append(DiaryDB.showDaysOnTextArea());
 		DiaryWinGUI.textContainer.append(makeLine("=", 96) + "\n");
 	}
 
@@ -58,7 +58,6 @@ public class DiaryLibrary implements Library<Diary> {
 	// "New"
 	public static String newDay() {
 		selectedDate = getCurrentDate();
-
 		return getCurrentDateTime();
 	}
 	// Insert
@@ -67,7 +66,6 @@ public class DiaryLibrary implements Library<Diary> {
 		DiaryWinGUI.textArea.setEnabled(true);
 		DiaryWinGUI.textContainer.setBackground(Color.WHITE);
 		DiaryWinGUI.textContainer.setEnabled(true);
-
 		selectedDate = DiaryWinGUI.textChoice.getText().trim();
 		PathControl.setActiveDay(selectedDate);
 		String date = selectedDate;
@@ -75,7 +73,7 @@ public class DiaryLibrary implements Library<Diary> {
 		// Insert historic day not todays date.
 		Day.insertDay(selectedDate);
 		Diary carpeDiem = new Diary(date, path, 0);
-		DiaryLibrary.addItem(carpeDiem);
+		addItem(carpeDiem);
 		return null;
 	}
 
@@ -191,15 +189,6 @@ public class DiaryLibrary implements Library<Diary> {
 		}
 		return returnText.toString();
 	}
-	/**
-	 * Getter for current path now()
-	 * 
-	 * @return Path in format (./yyyy/MM/)
-	 */
-	// public static String getCurrentPath() {
-	// System.out.printf("Den aktulla datumen %s\n", selectedDate);
-	// return Diary.getCPath(selectedDate);
-	// }
 	/**
 	 * Reader for database file "filename" (diarylist.txt) Parsing functions.
 	 * 

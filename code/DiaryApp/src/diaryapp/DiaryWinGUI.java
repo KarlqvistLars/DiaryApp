@@ -21,8 +21,8 @@ import javax.swing.border.Border;
 import diary.Day;
 import diary.DialogBox;
 import diary.Diary;
-import diary.DiaryLibrary;
-import diary.Library;
+import diary.DiaryDB;
+import diary.DiaryDBInterface;
 import diary.PathControl;
 
 public class DiaryWinGUI extends JFrame {
@@ -52,7 +52,7 @@ public class DiaryWinGUI extends JFrame {
 
 	@SuppressWarnings("unused")
 	private List<Diary> theModel;
-	Library<Diary> days = new DiaryLibrary();
+	DiaryDBInterface<Diary> days = new DiaryDB();
 	String filename = "diarylist.txt";
 
 	/**
@@ -60,7 +60,7 @@ public class DiaryWinGUI extends JFrame {
 	 */
 	DiaryWinGUI(List<Diary> model) {
 		// Programstart actions
-		String StartMessage = DiaryLibrary.readItems(filename);
+		String StartMessage = DiaryDB.readItems(filename);
 		textArea.setEnabled(false);
 		textArea.setBackground(Color.LIGHT_GRAY);
 		textArea.setEnabled(false);
@@ -213,7 +213,6 @@ public class DiaryWinGUI extends JFrame {
 	 *
 	 */
 	public class AppActionListener implements ActionListener {
-
 		DialogBox okPane = new DialogBox();
 		@Override
 		public void actionPerformed(ActionEvent ae) {
@@ -248,12 +247,12 @@ public class DiaryWinGUI extends JFrame {
 					 */
 					if (dayLoaded == false) {
 						serchActive = true;
-						DiaryLibrary.searchDiaryDays();
+						DiaryDB.searchDiaryDays();
 						textFieldHMIOutputText.setText("  SÖKURVAL VISAS");
 						saveFlag = false;
 					} else {
 						Day.saveDay(okPane);
-						DiaryLibrary.searchDiaryDays();
+						DiaryDB.searchDiaryDays();
 						textFieldHMIOutputText.setText("  SÖKURVAL VISAS");
 						dayLoaded = false;
 						saveFlag = false;
@@ -289,8 +288,8 @@ public class DiaryWinGUI extends JFrame {
 				case "New" :
 					// System.out.println("DEBUG: New");
 					if (textArea.getBackground() != Color.WHITE) {
-						if (existingDay(DiaryLibrary.getCurrentDate()
-								.trim()) == false) {
+						if (existingDay(
+								DiaryDB.getCurrentDate().trim()) == false) {
 							// "Databas" funktionen
 							textArea.setBackground(Color.WHITE);
 							textArea.setEnabled(true);
@@ -300,12 +299,12 @@ public class DiaryWinGUI extends JFrame {
 							PathControl.setActiveDay(Diary.getTodaysDate());
 							// DiaryLibrary.newDay();
 							Day.newDay();
-							String year = DiaryLibrary.getCurrentDate();
+							String year = DiaryDB.getCurrentDate();
 							String path = PathControl.convertInputDateToPath(
-									DiaryLibrary.selectedDate);
-							textChoice.setText(DiaryLibrary.selectedDate);
+									DiaryDB.selectedDate);
+							textChoice.setText(DiaryDB.selectedDate);
 							Diary carpeDiem = new Diary(year, path, 0);
-							DiaryLibrary.addItem(carpeDiem);
+							DiaryDB.addItem(carpeDiem);
 							dayLoaded = true;
 							saveFlag = true;
 						} else {
@@ -324,8 +323,8 @@ public class DiaryWinGUI extends JFrame {
 					// System.out.println("DEBUG: Time");
 					if (textArea.getBackground() == Color.WHITE
 							&& serchActive == false) {
-						DiaryLibrary.insertTimeStamp(String
-								.format(DiaryLibrary.getCurrentDateTime()));
+						DiaryDB.insertTimeStamp(String
+								.format(DiaryDB.getCurrentDateTime()));
 						textFieldHMIOutputText
 								.setText("  TIDSSTÄMPEL INFOGAD I DAGBOK");
 					}
@@ -347,7 +346,7 @@ public class DiaryWinGUI extends JFrame {
 						if (textChoice.getText().length() > 7) {
 							// Kontroll ifall dag redan existerar
 							if (!existingDay(textChoice.getText().trim())) {
-								DiaryLibrary.insertDay();
+								DiaryDB.insertDay();
 								dayLoaded = true;
 								saveFlag = true;
 								textFieldHMIOutputText
@@ -419,13 +418,15 @@ public class DiaryWinGUI extends JFrame {
 	 */
 	private void updateGUI() {
 		textChoice.setText(String.valueOf(textChoice.getText()));
-		DiaryLibrary.selectedDate = textChoice.getText();
+		DiaryDB.selectedDate = textChoice.getText();
 		textFieldHMIOutputText
 				.setText(String.valueOf(textFieldHMIOutputText.getText()));
 		textContainer.setText(String.valueOf(textContainer.getText()));
 		textFieldSearch.setText("N/A");
 		fromDateFormatted.setText("N/A");
 		toDateFormatted.setText("N/A");
+		textArea.setBounds(80, 75, 795 + (frame.getWidth() - 900),
+				475 + (frame.getHeight() - 600));
 	}
 	/**
 	 * 
@@ -448,7 +449,7 @@ public class DiaryWinGUI extends JFrame {
 	private List<Diary> searchItem(String searchPattern) {
 		boolean ok = false;
 		List<Diary> searchResult = new ArrayList<>();
-		Iterator<Diary> iter = DiaryLibrary.diaryList.iterator();
+		Iterator<Diary> iter = DiaryDB.diaryList.iterator();
 		while (iter.hasNext()) {
 			Diary temp = iter.next();
 			if (temp.toDate().contains(searchPattern)) {

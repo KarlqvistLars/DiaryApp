@@ -6,14 +6,17 @@ import java.time.LocalDateTime; // Import the LocalDateTime class
 import java.time.format.DateTimeFormatter; // Import the DateTimeFormatter class
 
 /**
+ * Diary is a CLASS for constructor of diaryday instance.
+ * 
  * @author Lars
  *
  */
 public class Diary implements Comparable<Diary> {
 	String Date;
 	String Path;
-	static String cPath;
 	int Status;
+
+	static String currentPath;
 
 	/**
 	 * Constructor of Diary day post. Containing date, relative path to file
@@ -52,23 +55,6 @@ public class Diary implements Comparable<Diary> {
 		return Path;
 	}
 
-	static public String getCPath(String insertDate) {
-		LocalDateTime myDateObj = LocalDateTime.now();
-		if (insertDate != "" || insertDate != null) {
-			int year = insertDate.indexOf(0, 3);
-			int month = insertDate.indexOf(4, 5);
-			int day = insertDate.indexOf(6, 7);
-			int hour = 12;
-			int min = 00;
-			// LocalDateTime.of(year, month, month, month, day)
-			myDateObj = LocalDateTime.of(year, month, day, hour, min);
-		}
-		DateTimeFormatter myFormatPath = DateTimeFormatter
-				.ofPattern("./yyyy/MM/");
-		cPath = myDateObj.format(myFormatPath);
-		return cPath;
-	}
-
 	/**
 	 * @param path
 	 *            the path to set
@@ -95,7 +81,6 @@ public class Diary implements Comparable<Diary> {
 	public String getDate() {
 		return Date;
 	}
-
 	/**
 	 * Getter for current Year now.
 	 * 
@@ -105,10 +90,9 @@ public class Diary implements Comparable<Diary> {
 		LocalDateTime myDateObj = LocalDateTime.now();
 		DateTimeFormatter myFormatDate = DateTimeFormatter
 				.ofPattern("yyyyMMdd");
-		DiaryLibrary.selectedDate = myDateObj.format(myFormatDate);
-		return DiaryLibrary.selectedDate;
+		DiaryDB.selectedDate = myDateObj.format(myFormatDate);
+		return DiaryDB.selectedDate;
 	}
-
 	/**
 	 * Getter for current Year now.
 	 * 
@@ -129,7 +113,6 @@ public class Diary implements Comparable<Diary> {
 		DateTimeFormatter myFormatDate = DateTimeFormatter.ofPattern("MM");
 		return myDateObj.format(myFormatDate);
 	}
-
 	/**
 	 * Method for storing daliypost in "database" textfile.
 	 * 
@@ -144,7 +127,6 @@ public class Diary implements Comparable<Diary> {
 		return String.format(" Diary [Date=%s, Path=%s, Status=%s]", Date, Path,
 				Status);
 	}
-
 	/**
 	 * Search funktion
 	 */

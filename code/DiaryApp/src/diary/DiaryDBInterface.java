@@ -3,7 +3,7 @@ package diary;
 import java.util.Collections;
 import java.util.List;
 
-public interface Library<T> {
+public interface DiaryDBInterface<T> {
 
 	/**
 	 * Adds new item
@@ -25,7 +25,7 @@ public interface Library<T> {
 	 *            databasefile 'filename' diarylist.txt.
 	 * @return Interface protype. null
 	 */
-	public static String readItems(String filename) {
+	static String readItems(String filename) {
 		return null;
 	}
 
