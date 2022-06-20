@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 
 import diaryapp.DiaryWinGUI;
 
-public class Day {
+public class Day implements DayInterface {
 	/**
 	 * Method to open day.
 	 * 
@@ -24,9 +24,9 @@ public class Day {
 		DiaryWinGUI.textArea.setBackground(Color.WHITE);
 		DiaryWinGUI.textContainer.setEnabled(true);
 		DiaryWinGUI.textContainer.setBackground(Color.WHITE);
-		day = DiaryLibrary.getInputFilePath(DiaryWinGUI.textChoice.getText());
-		PathControl.setActiveDay(day);
-		DiaryWinGUI.textContainer.setText(DiaryLibrary.openTheDay(day));
+		String dayPath = DiaryDB.getInputFilePath(day);
+		PathControl.setActiveDay(dayPath);
+		DiaryWinGUI.textContainer.setText(DiaryDB.openTheDay(day));
 		DiaryWinGUI.textFieldHMIOutputText.setText(String
 				.format("  DAG %s ÖPPNAS", DiaryWinGUI.textChoice.getText()));
 		return true;
@@ -44,7 +44,7 @@ public class Day {
 		DiaryWinGUI.textFieldHMIOutputText
 				.setText("  NY DAG TILLAGD TILL DAGBOK");
 		DiaryWinGUI.textContainer.setText("=== Dagboks anteckning ===\n");
-		DiaryWinGUI.textContainer.append(DiaryLibrary.newDay());
+		DiaryWinGUI.textContainer.append(DiaryDB.newDay());
 		DiaryWinGUI.textContainer.append("\n");
 		DiaryWinGUI.textArea.requestFocus();
 		return true;
@@ -73,7 +73,6 @@ public class Day {
 		DiaryWinGUI.textArea.requestFocus();
 		return true;
 	}
-
 	/**
 	 * 
 	 * @param okPane
@@ -81,79 +80,74 @@ public class Day {
 	 * @return Boolean true if succeful
 	 */
 	public static boolean saveDay(DialogBox okPane) {
-		System.out.println("saveDay(DialogBox okPane)\n");
 		// Implamentera controll på om katalog som skall sparas till existerar?
 		if (DiaryWinGUI.textArea.getBackground() == Color.WHITE) {
-			System.out.println(
-					"if (DiaryWinGUI.textArea.getBackground() == Color.WHITE)\n");
 			DiaryWinGUI.textFieldHMIOutputText
 					.setText("  SPARA ÖPPEN DAGBOKS NOTERING?");
 			int val = okPane.OptionOkNoCancel();
 			if (val == 0) {
 				// Skapa en kontroll som ser om öppen dag sparas"
 				// DiaryLibrary.saveTheDay("./2022/05/20220520.txt");
-				System.out.println("if (val == 0)\n");
-				PathControl.setActiveDay(DiaryLibrary.currentOpenDay());
-				System.out.println("if (val == 0) efter setCurrentOpenDay\n");
-
+				PathControl.setActiveDay(DiaryDB.currentOpenDay());
 				try {
-
-					Path path = Paths.get(DiaryLibrary.currentOpenPath);
-
+					Path path = Paths.get(DiaryDB.currentOpenPath);
 					Files.createDirectories(path);
-					System.out.println("Directory is created!" + path);
 				} catch (IOException e) {
 					System.err.println(
 							"Failed to create directory!" + e.getMessage());
 				}
-				saveTheDay(DiaryLibrary.currentOpenDay());
+				savingTheDay(DiaryDB.currentOpenDay());
 				DiaryWinGUI.textFieldHMIOutputText
 						.setText("  DAG SPARAD TILL DAGBOK");
 			} else {
 				DiaryWinGUI.textFieldHMIOutputText.setText("  DAGEN EJ SPARAD");
 			}
 		}
-		DiaryWinGUI.textFieldSearch.setText(DiaryLibrary.currentOpenPath);
+		DiaryWinGUI.textFieldSearch.setText(DiaryDB.currentOpenPath);
 		return true;
 	}
-
 	/**
 	 * Saving actions to assist method saveDay()
 	 * 
 	 * @param filename
 	 *            Name of the day being saved. ex. 20220515.txt
+	 * @return
 	 */
-	public static void saveTheDay(String filename) {
-		System.out.println("saveTheDay(String filename)");
+	public static boolean savingTheDay(String filename) {
+		boolean status = false;
 		// Sparar textfilen YYMMDD.txt
 		filename.trim();
 		if (filename.length() == 8) {
-			System.out.println("1." + filename);
 			PathControl.setActiveDay(filename);
-			System.out.println("2." + filename);
+			status = true;
 		} else {
 			DiaryWinGUI.textFieldHMIOutputText
 					.setText("   ETT FEL HAR INTRÄFFAT");
+			status = false;
 		}
 		String saveText = DiaryWinGUI.textContainer.getText();
 		if (true) { // Hitta villkor ifall biblioteket behöver skapas?
 			try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
 				pw.println(saveText);
+				status = true;
 			} catch (IOException ioe) {
 				System.out.println("Exception occurred: " + ioe);
+				status = false;
 			}
 		}
 		// Lägg till kod för att spara databasfilen diarylist.txt
 		filename = "diarylist.txt";
 		try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
-			for (Diary savedDay : DiaryLibrary.diaryList) {
+			for (Diary savedDay : DiaryDB.diaryList) {
 				pw.println(savedDay.dayToString());
+				status = true;
 			}
 		} catch (IOException ioe) {
 			System.out.println("Exception occurred: " + ioe);
+			status = false;
 		}
+		return status;
 	}
-
 	/**
 	 * Search method not yet implemented
 	 * 
