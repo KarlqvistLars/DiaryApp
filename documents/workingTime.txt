@@ -12,5 +12,6 @@ Framtills idag kanske 20h?
 2022/05/30: 2h note: test to implement insert day.
 2022/06/04: 2h note: new class created to sort out different paths.
 2022/06/10: 4h note: new feature "insert" made functional.
+2022/06/20: 3h note: working on unity-testing to remove unnecessary code mm.
 ==============
-Work hours:60h note: The first 20 hours are approx. Because it was built on a technique learnt from an assignment in AV20TR.
+Work hours:63h note: The first 20 hours are approx. Because it was built on a technique learnt from an assignment in AV20TR.
