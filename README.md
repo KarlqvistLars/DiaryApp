@@ -4,7 +4,7 @@ The plan for this projekt is to first just create a working version of the progr
 the code to full object oriented code so the vistors of this repository can see and follow the progress of the programming work.</br>
 </br>
 # Update README.md 2024-01-21:</br>
-The program requres Maven jgoodies-forms-1.8.0 framwork to run. </br>
+The program requres [Maven](https://central.sonatype.com/artifact/com.jgoodies/jgoodies-forms/1.8.0?smo=true) jgoodies-forms-1.8.0 framwork to run. </br>
 This is now includen in the repo.</br>
 
 The current release UML draft to make quick overview on the code is displayed here:</br>
