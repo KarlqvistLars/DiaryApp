@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>120</x>
+      <y>64</y>
+      <w>208</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>DiaryApp rel. 2022-06-20</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>120</x>
+      <y>192</y>
+      <w>376</w>
+      <h>360</h>
+    </coordinates>
+    <panel_attributes>diaryapp::DiaryWinGUI
+--
+-serialVersionUID = 1L: long
++frame: JFrame
++textFieldSearch = new JTextField(): JTextField
++textChoice = new JTextField(): JTextField
++textFieldHMIOutputText = new JTextField(): JTextField
+~fromDateFormatted = new JFormattedTextField(): JFormattedTextField
+~toDateFormatted = new JFormattedTextField(): JFormattedTextField
++textContainer = new JTextArea(): JTextArea
++textArea = new JScrollPane(textContainer): JScrollPane
+~newDay = false: Boolean
+~dayLoaded = false: Boolean
+~saveFlag = false: Boolean
+~serchActive = false: Boolean
+-theModel: List&lt;Diary&gt;
+~days = new DiaryDB(): DiaryDBInterface&lt;Diary&gt;
+~filename = "diarylist.txt": String
+--
+~DiaryWinGUI(List&lt;Diary&gt; model): ctor
++addButtonToFrame(JButton button): void
+~parseString(String format): String
+-resetForm(): void
+-updateGUI(): void
+-existingDay(String searchPattern): boolean
+-searchItem(String searchPattern): List&lt;Diary&gt;
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>512</x>
+      <y>392</y>
+      <w>240</w>
+      <h>328</h>
+    </coordinates>
+    <panel_attributes>diary::DiaryDB
+--
+~maxItemID = 1: int
++diaryList = new ArrayList(): List&lt;Diary&gt;
++selectedDate = "": String
+~currentOpenPath = "": String
+~currentOpenFile = "": String
+~filename = "": String
+--
++loadDiary(): String
++searchDiaryDays(): void
++openTheDay(String filename): String
++newDay(): String
++insertDay(): String
++insertTimeStamp(String timeStamp): void
+~makeLine(String sign, int signCount): String
++currentOpenDay(): String
++getInputFilePath(String filename): String
++dayToday(): String
++addItem(Diary item): boolean
++getCurrentDateTime(): String
++getCurrentDate(): String
++showDaysOnTextArea(): String
++readItems(String filename): String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>760</x>
+      <y>392</y>
+      <w>248</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>diary::Diary
+--
+~Date: String
+~Path: String
+~Status: int
+~currentPath: String
+--
++Diary(String date, String path, int status): ctor
++setDayToday(): void
++getPath(): String
+~setPath(String path): void
+~getStatus(): int
+~setStatus(int status): void
++getDate(): String
++getTodaysDate(): String
+~getYear(): String
+~getMonth(): String
++toDate(): String
++dayToString(): String
++compareTo(Diary o): int
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>512</x>
+      <y>192</y>
+      <w>240</w>
+      <h>184</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+diary::DiaryDBInterface
+--
+--
+~addItem(Diary item): boolean
+~readItems(String filename): String
+~openDiary(String filename): String
+~showDaysOnTextArea(): String
+~getNoOfItems(): int
+~getMaxItemID(): int
+~existingDay(String searchPattern): boolean
+~searchItem(String searchPattern): List&lt;T&gt;
+~getItem(int itemId): T
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>760</x>
+      <y>192</y>
+      <w>208</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+diary::DayInterface
+--
+--
++openDay(String day): boolean
+~newDay(): boolean
+~insertDay(): boolean
++saveDay(DialogBox okPane): boolean
++savingTheDay(String filename): void
++searchDays(String day): boolean
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1016</x>
+      <y>392</y>
+      <w>248</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>diary::Day
+--
+--
++openDay(String day): boolean
++newDay(): boolean
++insertDay(String dateInsert): boolean
++saveDay(DialogBox okPane): boolean
++savingTheDay(String filename): boolean
++searchDays(String day): boolean
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>976</x>
+      <y>192</y>
+      <w>288</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>diary::PathControl
+--
+--
++convertInputDateToFileName(String inputDate): String
++convertInputDateToPath(String inputDate): String
++setActiveDay(String activeDay): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1016</x>
+      <y>296</y>
+      <w>248</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>diary::DialogBox
+--
+--
++OptionOkNoCancel(): int
++OptionHelp(): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>120</x>
+      <y>104</y>
+      <w>1144</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>/diaryapp::DiaryGUIApp/
+--
+--
++main(String[] args): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
