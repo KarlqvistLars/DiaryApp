@@ -3,6 +3,8 @@ This is a project for making a diary application to easier make same daily notes
 The plan for this projekt is to first just create a working version of the program concept idea and after that refactor </br>
 the code to full object oriented code so the vistors of this repository can see and follow the progress of the programming work.</br>
 I will do this on my spare time.</br></br>
+
+Update text 2024-01-21:</br>
 The current release UML draft to make quick overview on the code i displayed here:</br>
 This was my first own javaproject and there are room for many improvments. </br>
 But I made it for fun and my own educational purpose.</br>
