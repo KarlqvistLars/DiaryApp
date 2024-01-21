@@ -10,6 +10,8 @@ But I made it for fun and my own educational purpose.</br>
 </br>
 # Status is: Realesed version 1.1.
 The realesed version is avalibel in directory.</br>
-https://github.com/KarlqvistLars/DiaryApp/tree/main/testRealese
+https://github.com/KarlqvistLars/DiaryApp/tree/main/testRealese</br>
+Simple manual is here:
+https://github.com/KarlqvistLars/DiaryApp/tree/main/testRealese/ManualDiaryAppVersion1.1_20220529.pdf
 </br></br>
-![alt text](/pics/diaryAppGUIv2.png)
+![alt text](/pics/diaryAppGUIv3.png)
