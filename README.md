@@ -5,7 +5,7 @@ the code to full object oriented code so the vistors of this repository can see 
 I will do this on my spare time.</br></br>
 
 # Update README.md 2024-01-21:</br>
-The current release UML draft to make quick overview on the code i displayed here:</br>
+The current release UML draft to make quick overview on the code is displayed here:</br>
 This was my first own javaproject and there are room for many improvments. </br>
 But I made it for fun and my own educational purpose.</br>
 ![UML DiaryApp](/UML_DiaryApp20220620.png)
