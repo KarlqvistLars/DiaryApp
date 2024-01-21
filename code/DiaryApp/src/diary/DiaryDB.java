@@ -40,6 +40,7 @@ public class DiaryDB implements DiaryDBInterface<Diary> {
 
 	// Open
 	static public String openTheDay(String filename) {
+
 		String dayText = "";
 		currentOpenPath = filename;
 		try {
@@ -55,11 +56,13 @@ public class DiaryDB implements DiaryDBInterface<Diary> {
 		}
 		return dayText;
 	}
+
 	// "New"
 	public static String newDay() {
 		selectedDate = getCurrentDate();
 		return getCurrentDateTime();
 	}
+
 	// Insert
 	public static String insertDay() {
 		DiaryWinGUI.textArea.setBackground(Color.WHITE);
@@ -96,10 +99,8 @@ public class DiaryDB implements DiaryDBInterface<Diary> {
 	/**
 	 * This Method is for making horisontal lines in the GUI textArea
 	 * 
-	 * @param sign
-	 *            The char caracter to make the line with (*,-,_,= osv.)
-	 * @param signCount
-	 *            The number of caracters that will make the line.
+	 * @param sign      The char caracter to make the line with (*,-,_,= osv.)
+	 * @param signCount The number of caracters that will make the line.
 	 * @return The textstring that represent the line.
 	 */
 	static String makeLine(String sign, int signCount) {
@@ -110,6 +111,7 @@ public class DiaryDB implements DiaryDBInterface<Diary> {
 		}
 		return returnText.toString();
 	}
+
 	/**
 	 * Getter for current open day
 	 * 
@@ -119,10 +121,10 @@ public class DiaryDB implements DiaryDBInterface<Diary> {
 		currentOpenFile = PathControl.convertInputDateToFileName(selectedDate);
 		return currentOpenFile;
 	}
+
 	/**
 	 * 
-	 * @param filename
-	 *            Input file name
+	 * @param filename Input file name
 	 * @return Input filen path
 	 */
 	public static String getInputFilePath(String filename) {
@@ -150,6 +152,7 @@ public class DiaryDB implements DiaryDBInterface<Diary> {
 		diaryList.add(item);
 		return true;
 	}
+
 	/**
 	 * Getter for current date time stamp just now.
 	 * 
@@ -158,11 +161,11 @@ public class DiaryDB implements DiaryDBInterface<Diary> {
 	public static String getCurrentDateTime() {
 		String stamp = "";
 		LocalDateTime myDateObj = LocalDateTime.now();
-		DateTimeFormatter myFormatDate = DateTimeFormatter
-				.ofPattern("yyyy-MM-dd kk.mm:");
+		DateTimeFormatter myFormatDate = DateTimeFormatter.ofPattern("yyyy-MM-dd kk.mm:");
 		stamp = myDateObj.format(myFormatDate);
 		return stamp;
 	}
+
 	/**
 	 * Getter for current date just now.
 	 * 
@@ -171,11 +174,11 @@ public class DiaryDB implements DiaryDBInterface<Diary> {
 	public static String getCurrentDate() {
 		String currentDate = "";
 		LocalDateTime myDateObj = LocalDateTime.now();
-		DateTimeFormatter myFormatDate = DateTimeFormatter
-				.ofPattern("yyyyMMdd");
+		DateTimeFormatter myFormatDate = DateTimeFormatter.ofPattern("yyyyMMdd");
 		currentDate = myDateObj.format(myFormatDate);
 		return currentDate;
 	}
+
 	/**
 	 * List function to print search list to textArea.
 	 * 
@@ -189,13 +192,13 @@ public class DiaryDB implements DiaryDBInterface<Diary> {
 		}
 		return returnText.toString();
 	}
+
 	/**
 	 * Reader for database file "filename" (diarylist.txt) Parsing functions.
 	 * 
-	 * @param filename
-	 *            Name on file to read content
-	 * @return "DAGBOK DATABAS LADDAD" if successful or "ETT FEL INTRÄFFADE" if
-	 *         file not found.
+	 * @param filename Name on file to read content
+	 * @return "DAGBOK DATABAS LADDAD" if successful or "ETT FEL INTRï¿½FFADE" if file
+	 *         not found.
 	 */
 	public static String readItems(String filename) {
 		String returMessage = "";
@@ -209,12 +212,10 @@ public class DiaryDB implements DiaryDBInterface<Diary> {
 				/**
 				 * Parse data from filename to partslist
 				 */
-				String onePart = data.substring(data.indexOf('[') + 1,
-						data.indexOf(']') + 1);
+				String onePart = data.substring(data.indexOf('[') + 1, data.indexOf(']') + 1);
 				String[] parts = onePart.split("=");
 				String date = parts[1].substring(0, parts[1].indexOf(", Path"));
-				String path = parts[2].substring(0,
-						parts[2].indexOf(", Status"));
+				String path = parts[2].substring(0, parts[2].indexOf(", Status"));
 				String status = parts[3].substring(0, parts[3].indexOf("]"));
 
 				// Clean and det values to variables
@@ -232,7 +233,7 @@ public class DiaryDB implements DiaryDBInterface<Diary> {
 			}
 			diaryList = fileInput;
 		} catch (FileNotFoundException err) {
-			returMessage = "   ETT FEL INTRÄFFADE";
+			returMessage = "   ETT FEL INTRï¿½FFADE";
 			err.printStackTrace();
 		}
 		return returMessage;

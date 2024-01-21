@@ -66,19 +66,14 @@ public class DiaryWinGUI extends JFrame {
 		textArea.setEnabled(false);
 		textContainer.setBackground(Color.LIGHT_GRAY);
 		// Scrollable textArea
-		textArea.setVerticalScrollBarPolicy(
-				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		// ToolTipTexts för Fields
-		textFieldSearch.setToolTipText(
-				"Listar alla sparade dagboksanteckningar hittills.");
-		textContainer.setToolTipText(
-				"Textruta för anteckning samt listruta för dagar.");
-		textChoice.setToolTipText(
-				"Indatafält för önskat datum i formatet [YYYYMMDD].");
-		textFieldHMIOutputText.setToolTipText(
-				"Infofält för utförda kommado samt ev. felinformation");
+		textArea.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		// ToolTipTexts fÃ¶r Fields
+		textFieldSearch.setToolTipText("Listar alla sparade dagboksanteckningar hittills.");
+		textContainer.setToolTipText("Textruta fÃ¶r anteckning samt listruta fÃ¶r dagar.");
+		textChoice.setToolTipText("IndatafÃ¤lt fÃ¶r Ã¶nskat datum i formatet [YYYYMMDD].");
+		textFieldHMIOutputText.setToolTipText("InfofÃ¤lt fÃ¶r utfÃ¤rda kommado samt ev. felinformation");
 
-		// Är menad att hålla den öppna databasen i minnet.
+		// Ã„r menad att hÃ¥lla den Ã¶ppna databasen i minnet.
 		theModel = model;
 
 		// Fonts
@@ -96,8 +91,7 @@ public class DiaryWinGUI extends JFrame {
 		// Define search button
 		JButton btnSearch = new JButton("Search");
 		btnSearch.setBounds(80, 5, 75, 30);
-		btnSearch.setToolTipText(
-				"Listar alla sparade dagboksanteckningar hittills.");
+		btnSearch.setToolTipText("Listar alla sparade dagboksanteckningar hittills.");
 		addButtonToFrame(btnSearch);
 
 		// Input field search text
@@ -145,34 +139,32 @@ public class DiaryWinGUI extends JFrame {
 		JButton btnOpen = new JButton("Open");
 		btnOpen.setBounds(5, 5, 70, 30);
 		btnOpen.setToolTipText(
-				"Öppnar dokument men hjälp av att man anger önskad dag att öppna i den vita rutan nedanför.");
+				"Ã–ppnar dokument men hjÃ¤lp av att man anger Ã¶nskad dag att Ã¶ppna i den vita rutan nedanfÃ¶r.");
 		addButtonToFrame(btnOpen);
 		// New
 		JButton btnNew = new JButton("New");
 		btnNew.setBounds(5, 75, 70, 30);
-		btnNew.setToolTipText(
-				"Skapar en ny anteckning för den aktuella dagen då den skapas.");
+		btnNew.setToolTipText("Skapar en ny anteckning fÃ¶r den aktuella dagen dÃ¥ den skapas.");
 		addButtonToFrame(btnNew);
 		// Reset
 		JButton btnReset = new JButton("Reset");
 		btnReset.setBounds(5, 110, 70, 30);
-		btnReset.setToolTipText("Tömmer alla fält på info.");
+		btnReset.setToolTipText("TÃ¶mmer alla fÃ¤lt pÃ¥ info.");
 		addButtonToFrame(btnReset);
 		// Time
 		JButton btnTimeSTamp = new JButton("Time");
 		btnTimeSTamp.setBounds(5, 145, 70, 30);
 		btnTimeSTamp.setToolTipText(
-				"Infogar en tidstämpel för den aktuella tiden och underlättar att avgränsa olika anteckningar och händelser.");
+				"Infogar en tidstÃ¤mpel fÃ¶r den aktuella tiden och underlÃ¤ttar att avgrÃ¤nsa olika anteckningar och hÃ¤ndelser.");
 		addButtonToFrame(btnTimeSTamp);
 		// Save
 		JButton btnSave = new JButton("Save");
 		btnSave.setBounds(5, 180, 70, 30);
-		btnSave.setToolTipText("Sparar öppen daganteckning.");
+		btnSave.setToolTipText("Sparar Ã¶ppen daganteckning.");
 		addButtonToFrame(btnSave);
 		// Insert day
 		JButton btnInsert = new JButton("Insert");
-		btnInsert.setToolTipText(
-				"Infogar en dag med det datum som anges i [ Inmatningsfältet ].");
+		btnInsert.setToolTipText("Infogar en dag med det datum som anges i [ InmatningsfÃ¤ltet ].");
 		btnInsert.setBounds(5, 215, 70, 30);
 		addButtonToFrame(btnInsert);
 		// Help
@@ -196,11 +188,11 @@ public class DiaryWinGUI extends JFrame {
 		lblFromDate.setBounds(435, 5, 90, 30);
 		frame.getContentPane().add(lblFromDate);
 	}
+
 	/**
 	 * Method for adding new button to frame.
 	 * 
-	 * @param button
-	 *            Add button name to add button to frame.
+	 * @param button Add button name to add button to frame.
 	 */
 	public void addButtonToFrame(JButton button) {
 		button.addActionListener(new AppActionListener());
@@ -208,183 +200,171 @@ public class DiaryWinGUI extends JFrame {
 		button.setBorder(BorderFactory.createRaisedBevelBorder());
 		frame.getContentPane().add(button);
 	}
+
 	/**
 	 * Inner class handling user interactions via buttons
 	 *
 	 */
 	public class AppActionListener implements ActionListener {
 		DialogBox okPane = new DialogBox();
+
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			JButton trigger = (JButton) ae.getSource();
 			textContainer.setLineWrap(true);
 			switch (trigger.getText()) {
-				case "Reset" :
-					// System.out.println("DEBUG: Reset");
-					newDay = false;
-					if (saveFlag == true && serchActive == false) {
-						Day.saveDay(okPane);
-					}
-					if (textArea.getBackground() == Color.WHITE) {
-						textFieldHMIOutputText.setText("  ALLA FÄLT RENSAS");
-						PathControl.setActiveDay("");
-					}
-					textArea.setEnabled(false);
-					resetForm();
+			case "Reset":
+				// System.out.println("DEBUG: Reset");
+				newDay = false;
+				if (saveFlag == true && serchActive == false) {
+					Day.saveDay(okPane);
+				}
+				if (textArea.getBackground() == Color.WHITE) {
+					textFieldHMIOutputText.setText("  ALLA FÃ„LT RENSAS");
+					PathControl.setActiveDay("");
+				}
+				textArea.setEnabled(false);
+				resetForm();
+				dayLoaded = false;
+				saveFlag = false;
+				break;
+
+			case "Search":
+				// System.out.println("DEBUG: Search");
+				/**
+				 * Pseudokod hÃ¤r: Steg 1: SÃ¶kning skall vara mÃ¶jlig att gÃ¶ra i den textbaserad
+				 * databasfilen. Steg 2: SÃ¶kning bÃ¶r vara mÃ¶jlig att gÃ¶ra i
+				 * dagboksanteckningarna i textdokumenten.
+				 * 
+				 * SÃ¶kningen skall gÃ¥ att begrÃ¤nsa med frÃ¥n och till datum. SÃ¶ka efter sÃ¶kord
+				 * skall vara mÃ¶jlig i textmassan.
+				 */
+				if (dayLoaded == false) {
+					serchActive = true;
+					DiaryDB.searchDiaryDays();
+					textFieldHMIOutputText.setText("  SÃ–KURVAL VISAS");
+					saveFlag = false;
+				} else {
+					Day.saveDay(okPane);
+					DiaryDB.searchDiaryDays();
+					textFieldHMIOutputText.setText("  SÃ–KURVAL VISAS");
 					dayLoaded = false;
 					saveFlag = false;
-					break;
+				}
+				break;
 
-				case "Search" :
-					// System.out.println("DEBUG: Search");
-					/**
-					 * Pseudokod här: Steg 1: Sökning skall vara möjlig att göra
-					 * i den textbaserad databasfilen. Steg 2: Sökning bör vara
-					 * möjlig att göra i dagboksanteckningarna i textdokumenten.
-					 * 
-					 * Sökningen skall gå att begränsa med från och till datum.
-					 * Söka efter sökord skall vara möjlig i textmassan.
-					 */
-					if (dayLoaded == false) {
-						serchActive = true;
-						DiaryDB.searchDiaryDays();
-						textFieldHMIOutputText.setText("  SÖKURVAL VISAS");
-						saveFlag = false;
-					} else {
-						Day.saveDay(okPane);
-						DiaryDB.searchDiaryDays();
-						textFieldHMIOutputText.setText("  SÖKURVAL VISAS");
-						dayLoaded = false;
-						saveFlag = false;
-					}
-					break;
-
-				case "Open" :
-					// System.out.println("DEBUG: Open");
-					if (dayLoaded == false) {
-						if (textChoice.getSelectionEnd() > 7) {
-							// DiaryLibrary.readItems(filename);
-							if (existingDay(textChoice.getText().trim())) {
-								Day.openDay(textChoice.getText().trim());
-								serchActive = false;
-								dayLoaded = true;
-							} else {
-								textFieldHMIOutputText
-										.setText("  VALT DATUM SAKNAS");
-								dayLoaded = false;
-							}
+			case "Open":
+				// System.out.println("DEBUG: Open");
+				if (dayLoaded == false) {
+					if (textChoice.getSelectionEnd() > 7) {
+						// DiaryLibrary.readItems(filename);
+						if (existingDay(textChoice.getText().trim())) {
+							Day.openDay(textChoice.getText().trim());
+							serchActive = false;
+							dayLoaded = true;
 						} else {
-							textFieldHMIOutputText
-									.setText("  VAL AV DAG SAKNAS");
+							textFieldHMIOutputText.setText("  VALT DATUM SAKNAS");
 							dayLoaded = false;
 						}
-						saveFlag = true;
 					} else {
-						textFieldHMIOutputText
-								.setText("  RESET DAG FÖRE NY KAN LADDAS");
+						textFieldHMIOutputText.setText("  VAL AV DAG SAKNAS");
 						dayLoaded = false;
 					}
-					break;
-				case "New" :
-					// System.out.println("DEBUG: New");
-					if (textArea.getBackground() != Color.WHITE) {
-						if (existingDay(
-								DiaryDB.getCurrentDate().trim()) == false) {
-							// "Databas" funktionen
-							textArea.setBackground(Color.WHITE);
-							textArea.setEnabled(true);
-							textContainer.setBackground(Color.WHITE);
-							textContainer.setEnabled(true);
+					saveFlag = true;
+				} else {
+					textFieldHMIOutputText.setText("  RESET DAG FÃ–RE NY KAN LADDAS");
+					dayLoaded = false;
+				}
+				break;
+			case "New":
+				// System.out.println("DEBUG: New");
+				if (textArea.getBackground() != Color.WHITE) {
+					if (existingDay(DiaryDB.getCurrentDate().trim()) == false) {
+						// "Databas" funktionen
+						textArea.setBackground(Color.WHITE);
+						textArea.setEnabled(true);
+						textContainer.setBackground(Color.WHITE);
+						textContainer.setEnabled(true);
 
-							PathControl.setActiveDay(Diary.getTodaysDate());
-							// DiaryLibrary.newDay();
-							Day.newDay();
-							String year = DiaryDB.getCurrentDate();
-							String path = PathControl.convertInputDateToPath(
-									DiaryDB.selectedDate);
-							textChoice.setText(DiaryDB.selectedDate);
-							Diary carpeDiem = new Diary(year, path, 0);
-							DiaryDB.addItem(carpeDiem);
+						PathControl.setActiveDay(Diary.getTodaysDate());
+						// DiaryLibrary.newDay();
+						Day.newDay();
+						String year = DiaryDB.getCurrentDate();
+						String path = PathControl.convertInputDateToPath(DiaryDB.selectedDate);
+						textChoice.setText(DiaryDB.selectedDate);
+						Diary carpeDiem = new Diary(year, path, 0);
+						DiaryDB.addItem(carpeDiem);
+						dayLoaded = true;
+						saveFlag = true;
+					} else {
+						textFieldHMIOutputText.setText("  ANTECKNING FÃ–R IDAG HAR REDAN SKAPATS");
+						saveFlag = false;
+					}
+				} else {
+					textFieldHMIOutputText.setText("  Ã…TERSTÃ„LL FÃ–RE Ã–PPNA NY DAG");
+					saveFlag = false;
+				}
+				break;
+
+			case "Time":
+				// System.out.println("DEBUG: Time");
+				if (textArea.getBackground() == Color.WHITE && serchActive == false) {
+					DiaryDB.insertTimeStamp(String.format(DiaryDB.getCurrentDateTime()));
+					textFieldHMIOutputText.setText("  TIDSSTÃ„MPEL INFOGAD I DAGBOK");
+				}
+				break;
+
+			case "Save":
+				// System.out.println("DEBUG: Save");
+				if (serchActive == false && dayLoaded == true) {
+					Day.saveDay(okPane);
+					saveFlag = false;
+				} else {
+					saveFlag = true;
+				}
+				break;
+
+			case "Insert":
+				// System.out.println("DEBUG: Insert day");
+				if (dayLoaded == false) {
+					if (textChoice.getText().length() > 7) {
+						// Kontroll ifall dag redan existerar
+						if (!existingDay(textChoice.getText().trim())) {
+							DiaryDB.insertDay();
 							dayLoaded = true;
 							saveFlag = true;
-						} else {
 							textFieldHMIOutputText.setText(
-									"  ANTECKNING FÖR IDAG HAR REDAN SKAPATS");
-							saveFlag = false;
-						}
-					} else {
-						textFieldHMIOutputText
-								.setText("  ÅTERSTÄLL FÖRE ÖPPNA NY DAG");
-						saveFlag = false;
-					}
-					break;
-
-				case "Time" :
-					// System.out.println("DEBUG: Time");
-					if (textArea.getBackground() == Color.WHITE
-							&& serchActive == false) {
-						DiaryDB.insertTimeStamp(String
-								.format(DiaryDB.getCurrentDateTime()));
-						textFieldHMIOutputText
-								.setText("  TIDSSTÄMPEL INFOGAD I DAGBOK");
-					}
-					break;
-
-				case "Save" :
-					// System.out.println("DEBUG: Save");
-					if (serchActive == false && dayLoaded == true) {
-						Day.saveDay(okPane);
-						saveFlag = false;
-					} else {
-						saveFlag = true;
-					}
-					break;
-
-				case "Insert" :
-					// System.out.println("DEBUG: Insert day");
-					if (dayLoaded == false) {
-						if (textChoice.getText().length() > 7) {
-							// Kontroll ifall dag redan existerar
-							if (!existingDay(textChoice.getText().trim())) {
-								DiaryDB.insertDay();
-								dayLoaded = true;
-								saveFlag = true;
-								textFieldHMIOutputText
-										.setText("  ANTECKNING FÖR DAG "
-												+ textChoice.getText().trim()
-												+ " HAR " + "SKAPATS");
-							} else {
-								textFieldHMIOutputText.setText(
-										"  ANTECKNING FÖR IDAG HAR REDAN SKAPATS");
-								// saveFlag = false;
-							}
+									"  ANTECKNING FÃ–R DAG " + textChoice.getText().trim() + " HAR " + "SKAPATS");
 						} else {
-							textFieldHMIOutputText
-									.setText("  INGEN GILTIG DAG");
+							textFieldHMIOutputText.setText("  ANTECKNING FÃ–R IDAG HAR REDAN SKAPATS");
 							// saveFlag = false;
 						}
+					} else {
+						textFieldHMIOutputText.setText("  INGEN GILTIG DAG");
+						// saveFlag = false;
 					}
-					break;
+				}
+				break;
 
-				case "Help" :
-					DialogBox helpPane = new DialogBox();
-					textFieldHMIOutputText
-							.setText("  INFO OM APPEN OCH DESS SYFTE");
-					helpPane.OptionHelp();
-					break;
+			case "Help":
+				DialogBox helpPane = new DialogBox();
+				textFieldHMIOutputText.setText("  INFO OM APPEN OCH DESS SYFTE");
+				helpPane.OptionHelp();
+				break;
 
-				case "Exit" :
-					// System.out.println("DEBUG: Exit");
-					if (saveFlag == true) {
-						Day.saveDay(okPane);
-					}
-					System.exit(0);
-					break;
+			case "Exit":
+				// System.out.println("DEBUG: Exit");
+				if (saveFlag == true) {
+					Day.saveDay(okPane);
+				}
+				System.exit(0);
+				break;
 			}
 			// trigger update of the GUI when model has changed
 			updateGUI();
 		}
 	}
+
 	/**
 	 * 
 	 * @param format
@@ -397,6 +377,7 @@ public class DiaryWinGUI extends JFrame {
 		format = part[0];
 		return format;
 	}
+
 	/**
 	 * Reset function for form.
 	 */
@@ -413,21 +394,21 @@ public class DiaryWinGUI extends JFrame {
 		textContainer.setBackground(Color.LIGHT_GRAY);
 		textArea.setBackground(Color.LIGHT_GRAY);
 	}
+
 	/**
 	 * This method will read model attributes and force a visual update
 	 */
 	private void updateGUI() {
 		textChoice.setText(String.valueOf(textChoice.getText()));
 		DiaryDB.selectedDate = textChoice.getText();
-		textFieldHMIOutputText
-				.setText(String.valueOf(textFieldHMIOutputText.getText()));
+		textFieldHMIOutputText.setText(String.valueOf(textFieldHMIOutputText.getText()));
 		textContainer.setText(String.valueOf(textContainer.getText()));
 		textFieldSearch.setText("N/A");
 		fromDateFormatted.setText("N/A");
 		toDateFormatted.setText("N/A");
-		textArea.setBounds(80, 75, 795 + (frame.getWidth() - 900),
-				475 + (frame.getHeight() - 600));
+		textArea.setBounds(80, 75, 795 + (frame.getWidth() - 900), 475 + (frame.getHeight() - 600));
 	}
+
 	/**
 	 * 
 	 * @param searchPattern
@@ -441,6 +422,7 @@ public class DiaryWinGUI extends JFrame {
 		// System.out.println(check);
 		return check;
 	}
+
 	/**
 	 * 
 	 * @param searchPattern
