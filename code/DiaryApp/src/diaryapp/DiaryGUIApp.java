@@ -18,7 +18,7 @@ public abstract class DiaryGUIApp implements DiaryDBInterface<DiaryDB> {
 					List<Diary> model = new ArrayList<>();
 					DiaryWinGUI window = new DiaryWinGUI(model);
 					window.frame.setVisible(true);
-					window.frame.setTitle("DAGBOK v1.1");
+					window.frame.setTitle("DAGBOK v1.2");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

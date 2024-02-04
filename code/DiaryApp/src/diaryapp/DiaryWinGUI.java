@@ -47,6 +47,12 @@ public class DiaryWinGUI extends JFrame {
 	Boolean saveFlag = false;
 	Boolean serchActive = false;
 
+	// Debugfields
+//	public static JTextField statusNewDay = new JTextField();
+//	public static JTextField statusDayLoaded = new JTextField();
+//	public static JTextField statusSaveFlag = new JTextField();
+//	public static JTextField statusSearchActive = new JTextField();
+
 	// model reference
 	// private Diary theModel;
 
@@ -100,6 +106,43 @@ public class DiaryWinGUI extends JFrame {
 		frame.getContentPane().add(textFieldSearch);
 		textFieldSearch.setColumns(20);
 		Border border = textFieldSearch.getBorder();
+
+		// Debug field flag status
+//		statusNewDay = new JTextField();
+//		statusNewDay.setBounds(10, 260, 70, 28);
+//		frame.getContentPane().add(statusNewDay);
+//		statusNewDay.setColumns(20);
+//		JLabel lblStatusNewDay = new JLabel("StatusNewDay:");
+//		lblStatusNewDay.setFont(new Font("Tahoma", Font.PLAIN, 10));
+//		lblStatusNewDay.setBounds(10, 250, 100, 10);
+//		frame.getContentPane().add(lblStatusNewDay);
+//
+//		statusDayLoaded = new JTextField();
+//		statusDayLoaded.setBounds(10, 300, 70, 28);
+//		frame.getContentPane().add(statusDayLoaded);
+//		statusDayLoaded.setColumns(20);
+//		JLabel lblStatusDayLoaded = new JLabel("StatusDayLoaded:");
+//		lblStatusDayLoaded.setFont(new Font("Tahoma", Font.PLAIN, 10));
+//		lblStatusDayLoaded.setBounds(10, 290, 100, 10);
+//		frame.getContentPane().add(lblStatusDayLoaded);
+//
+//		statusSaveFlag = new JTextField();
+//		statusSaveFlag.setBounds(10, 340, 70, 28);
+//		frame.getContentPane().add(statusSaveFlag);
+//		statusSaveFlag.setColumns(20);
+//		JLabel lblStatusSaveFlag = new JLabel("StatusSaveFlag:");
+//		lblStatusSaveFlag.setFont(new Font("Tahoma", Font.PLAIN, 10));
+//		lblStatusSaveFlag.setBounds(10, 330, 100, 10);
+//		frame.getContentPane().add(lblStatusSaveFlag);
+//
+//		statusSearchActive = new JTextField();
+//		statusSearchActive.setBounds(10, 380, 70, 28);
+//		frame.getContentPane().add(statusSearchActive);
+//		statusSearchActive.setColumns(20);
+//		JLabel lblStatusSearchActive = new JLabel("StatusSearchActive:");
+//		lblStatusSearchActive.setFont(new Font("Tahoma", Font.PLAIN, 10));
+//		lblStatusSearchActive.setBounds(10, 370, 100, 10);
+//		frame.getContentPane().add(lblStatusSearchActive);
 
 		// From Date
 		fromDateFormatted.setBounds(520, 6, 140, 28);
@@ -187,6 +230,9 @@ public class DiaryWinGUI extends JFrame {
 		lblFromDate.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblFromDate.setBounds(435, 5, 90, 30);
 		frame.getContentPane().add(lblFromDate);
+
+		// Init status
+		updateGUI();
 	}
 
 	/**
@@ -206,27 +252,27 @@ public class DiaryWinGUI extends JFrame {
 	 *
 	 */
 	public class AppActionListener implements ActionListener {
-		DialogBox okPane = new DialogBox();
 
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			JButton trigger = (JButton) ae.getSource();
 			textContainer.setLineWrap(true);
 			switch (trigger.getText()) {
+
 			case "Reset":
 				// System.out.println("DEBUG: Reset");
 				newDay = false;
-				if (saveFlag == true && serchActive == false) {
-					Day.saveDay(okPane);
+				int value = 0;
+				if (saveFlag == false && serchActive == false) {
+					value = saveAction();
 				}
-				if (textArea.getBackground() == Color.WHITE) {
+				if (textArea.getBackground() == Color.WHITE && value != 2) {
 					textFieldHMIOutputText.setText("  ALLA FÄLT RENSAS");
 					PathControl.setActiveDay("");
+					textArea.setEnabled(false);
+					resetForm();
+					dayLoaded = false;
 				}
-				textArea.setEnabled(false);
-				resetForm();
-				dayLoaded = false;
-				saveFlag = false;
 				break;
 
 			case "Search":
@@ -245,23 +291,24 @@ public class DiaryWinGUI extends JFrame {
 					textFieldHMIOutputText.setText("  SÖKURVAL VISAS");
 					saveFlag = false;
 				} else {
-					Day.saveDay(okPane);
+					saveAction();
 					DiaryDB.searchDiaryDays();
 					textFieldHMIOutputText.setText("  SÖKURVAL VISAS");
 					dayLoaded = false;
-					saveFlag = false;
 				}
 				break;
 
 			case "Open":
 				// System.out.println("DEBUG: Open");
 				if (dayLoaded == false) {
+					saveFlag = true;
 					if (textChoice.getSelectionEnd() > 7) {
 						// DiaryLibrary.readItems(filename);
 						if (existingDay(textChoice.getText().trim())) {
 							Day.openDay(textChoice.getText().trim());
 							serchActive = false;
 							dayLoaded = true;
+							saveFlag = false;
 						} else {
 							textFieldHMIOutputText.setText("  VALT DATUM SAKNAS");
 							dayLoaded = false;
@@ -270,7 +317,6 @@ public class DiaryWinGUI extends JFrame {
 						textFieldHMIOutputText.setText("  VAL AV DAG SAKNAS");
 						dayLoaded = false;
 					}
-					saveFlag = true;
 				} else {
 					textFieldHMIOutputText.setText("  RESET DAG FÖRE NY KAN LADDAS");
 					dayLoaded = false;
@@ -295,10 +341,10 @@ public class DiaryWinGUI extends JFrame {
 						Diary carpeDiem = new Diary(year, path, 0);
 						DiaryDB.addItem(carpeDiem);
 						dayLoaded = true;
-						saveFlag = true;
+						saveFlag = false;
 					} else {
 						textFieldHMIOutputText.setText("  ANTECKNING FÖR IDAG HAR REDAN SKAPATS");
-						saveFlag = false;
+						saveFlag = true;
 					}
 				} else {
 					textFieldHMIOutputText.setText("  ÅTERSTÄLL FÖRE ÖPPNA NY DAG");
@@ -315,13 +361,7 @@ public class DiaryWinGUI extends JFrame {
 				break;
 
 			case "Save":
-				// System.out.println("DEBUG: Save");
-				if (serchActive == false && dayLoaded == true) {
-					Day.saveDay(okPane);
-					saveFlag = false;
-				} else {
-					saveFlag = true;
-				}
+				saveAction();
 				break;
 
 			case "Insert":
@@ -354,15 +394,35 @@ public class DiaryWinGUI extends JFrame {
 
 			case "Exit":
 				// System.out.println("DEBUG: Exit");
-				if (saveFlag == true) {
-					Day.saveDay(okPane);
+				int x = 0;
+				if (saveFlag == false) {
+					x = saveAction();
 				}
-				System.exit(0);
+				if (x == 0 || x == 1) {
+					System.exit(0);
+				}
+				System.out.println(x);
 				break;
 			}
 			// trigger update of the GUI when model has changed
 			updateGUI();
 		}
+	}
+
+	// Helper funcs
+
+	private int saveAction() {
+		DialogBox okPane = new DialogBox();
+		int value = Day.saveDay(okPane);
+		if (value == 0) {
+			saveFlag = true;
+		} else if (value == 1) {
+			saveFlag = false;
+		} else if (value == 2) {
+			textFieldHMIOutputText.setText("  ÅTGÄRDEN ABRUTEN");
+			saveFlag = false;
+		}
+		return value;
 	}
 
 	/**
@@ -386,7 +446,8 @@ public class DiaryWinGUI extends JFrame {
 			textFieldHMIOutputText.setText(null);
 		}
 		textFieldSearch.setText(null);
-		textChoice.setText(textChoice.getText());
+//		textChoice.setText(textChoice.getText());
+		textChoice.setText(null);
 		textContainer.setText(null);
 		// textArea.setText(null);
 		toDateFormatted.setText(null);
@@ -407,6 +468,12 @@ public class DiaryWinGUI extends JFrame {
 		fromDateFormatted.setText("N/A");
 		toDateFormatted.setText("N/A");
 		textArea.setBounds(80, 75, 795 + (frame.getWidth() - 900), 475 + (frame.getHeight() - 600));
+
+//		statusNewDay.setText(newDay.toString());
+//		statusDayLoaded.setText(dayLoaded.toString());
+//		statusSaveFlag.setText(saveFlag.toString());
+//		statusSearchActive.setText(serchActive.toString());
+
 	}
 
 	/**

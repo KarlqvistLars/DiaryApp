@@ -74,11 +74,12 @@ public class Day implements DayInterface {
 	 * @param okPane Canvas for Dialogbox Yes/No/Cancel
 	 * @return Boolean true if succeful
 	 */
-	public static boolean saveDay(DialogBox okPane) {
+	public static int saveDay(DialogBox okPane) {
+		int val = 0;
 		// Implamentera controll på om katalog som skall sparas till existerar?
 		if (DiaryWinGUI.textArea.getBackground() == Color.WHITE) {
 			DiaryWinGUI.textFieldHMIOutputText.setText("  SPARA ÖPPEN DAGBOKS NOTERING?");
-			int val = okPane.OptionOkNoCancel();
+			val = okPane.OptionOkNoCancel();
 			if (val == 0) {
 				// Skapa en kontroll som ser om öppen dag sparas"
 				// DiaryLibrary.saveTheDay("./2022/05/20220520.txt");
@@ -96,7 +97,7 @@ public class Day implements DayInterface {
 			}
 		}
 		DiaryWinGUI.textFieldSearch.setText(DiaryDB.currentOpenPath);
-		return true;
+		return val;
 	}
 
 	/**

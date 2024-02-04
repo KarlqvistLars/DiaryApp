@@ -82,7 +82,6 @@ public class DiaryDB implements DiaryDBInterface<Diary> {
 
 	// Time
 	public static void insertTimeStamp(String timeStamp) {
-		DiaryWinGUI.textContainer.append("\n");
 		DiaryWinGUI.textContainer.append(timeStamp);
 		DiaryWinGUI.textContainer.append("\n");
 		DiaryWinGUI.textArea.requestFocus();
@@ -233,7 +232,7 @@ public class DiaryDB implements DiaryDBInterface<Diary> {
 			}
 			diaryList = fileInput;
 		} catch (FileNotFoundException err) {
-			returMessage = "   ETT FEL INTR�FFADE";
+			returMessage = "   ETT FEL INTRÄFFADE";
 			err.printStackTrace();
 		}
 		return returMessage;
