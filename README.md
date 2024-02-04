@@ -12,7 +12,8 @@ This was my first own javaproject and there are room for many improvments. </br>
 But I made it for fun and my own educational purpose.</br>
 ![UML DiaryApp](/UML_DiaryApp20220620.png)
 </br>
-# Status is: Realesed version 1.1.
+# Status is: Realesed version 1.2. 
+(Updated 2024-02-05 - Bugfixes on save dialog)</br>
 The realesed version is avalibel in directory.</br>
 https://github.com/KarlqvistLars/DiaryApp/tree/main/testRealese</br>
 Simple manual is here:</br>
