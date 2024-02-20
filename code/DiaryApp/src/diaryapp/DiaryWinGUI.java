@@ -154,6 +154,7 @@ public class DiaryWinGUI extends JFrame {
 		// Setting up the diary textArea
 		textContainer.setFont(font2);
 		textArea.setBorder(border);
+
 		textArea.setBounds(80, 75, 795, 475);
 		textArea.setBackground(Color.LIGHT_GRAY);
 		textArea.setForeground(Color.black);
@@ -233,6 +234,16 @@ public class DiaryWinGUI extends JFrame {
 
 		// Init status
 		updateGUI();
+	}
+
+	private void parsWindowFrame(Object ram) {
+		String[] pars = ram.toString().split("=");
+		String[] n1 = pars[1].split(",");
+		String[] n2 = pars[2].split(",");
+		String[] n3 = pars[3].split(",");
+		String[] n4 = pars[4].split(",");
+		n4 = n4[0].split("]");
+		System.out.println(n1[0] + " " + n2[0] + " " + n3[0] + " " + n4[0]);
 	}
 
 	/**
@@ -413,7 +424,8 @@ public class DiaryWinGUI extends JFrame {
 
 	private int saveAction() {
 		DialogBox okPane = new DialogBox();
-		int value = Day.saveDay(okPane);
+
+		int value = Day.saveDay(okPane, frame);
 		if (value == 0) {
 			saveFlag = true;
 		} else if (value == 1) {
@@ -459,7 +471,7 @@ public class DiaryWinGUI extends JFrame {
 	/**
 	 * This method will read model attributes and force a visual update
 	 */
-	private void updateGUI() {
+	public void updateGUI() {
 		textChoice.setText(String.valueOf(textChoice.getText()));
 		DiaryDB.selectedDate = textChoice.getText();
 		textFieldHMIOutputText.setText(String.valueOf(textFieldHMIOutputText.getText()));
@@ -467,7 +479,10 @@ public class DiaryWinGUI extends JFrame {
 		textFieldSearch.setText("N/A");
 		fromDateFormatted.setText("N/A");
 		toDateFormatted.setText("N/A");
+		// Adapts textArea to the border frame
 		textArea.setBounds(80, 75, 795 + (frame.getWidth() - 900), 475 + (frame.getHeight() - 600));
+		Object ram = frame.getBounds();
+		parsWindowFrame(ram);
 
 //		statusNewDay.setText(newDay.toString());
 //		statusDayLoaded.setText(dayLoaded.toString());
@@ -478,7 +493,7 @@ public class DiaryWinGUI extends JFrame {
 
 	/**
 	 * 
-	 * @param searchPattern
+	 * @param searchPattern : Not yet implemented
 	 * @return
 	 */
 	private boolean existingDay(String searchPattern) {
@@ -492,7 +507,7 @@ public class DiaryWinGUI extends JFrame {
 
 	/**
 	 * 
-	 * @param searchPattern
+	 * @param searchPattern : Not yet implemented
 	 * @return
 	 */
 	private List<Diary> searchItem(String searchPattern) {

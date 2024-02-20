@@ -12,9 +12,16 @@ import diaryapp.DiaryWinGUI;
  * @author Lars
  */
 public class DialogBox {
-	public int OptionOkNoCancel() {
-		JFrame okBox = new JFrame();
-		okBox.setLocationRelativeTo(DiaryWinGUI.frame);
+
+	public int OptionOkNoCancel(JFrame frame) {
+		JFrame okBox = new JFrame("Spara");
+//		frame.add(okBox);
+//		Point point = DiaryWinGUI.frame.getLocationOnScreen();
+//		okBox.setLocation(DiaryWinGUI.frame.getLocationOnScreen());
+//		System.out.println(point);
+		okBox.setSize(200, 100);
+		okBox.setLocationRelativeTo(frame);
+		System.out.println("ok box location " + okBox.getLocation());
 		okBox.setTitle("Spara");
 		int t = JOptionPane.showConfirmDialog(okBox, "Spara öppen dagboks notering? ");
 		return t;

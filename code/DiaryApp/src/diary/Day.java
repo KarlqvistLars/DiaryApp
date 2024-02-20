@@ -8,14 +8,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import javax.swing.JFrame;
+
 import diaryapp.DiaryWinGUI;
 
+/**
+ * 
+ * @author lekar
+ *
+ */
 public class Day implements DayInterface {
 	/**
 	 * Method to open day.
 	 * 
 	 * @param day To be opened (day= YYYYMMDD) insert date in frame textChoice.
-	 * @return If successful true
+	 * @return boolean - true or false
 	 */
 	public static boolean openDay(String day) {
 		// kod för att ladda dagen (day= YYYYMMDD) angiven i textChoice.
@@ -31,9 +38,9 @@ public class Day implements DayInterface {
 	}
 
 	/**
-	 * Appends new day to textArea on GUI
+	 * Appends new day to textArea on GUI.
 	 * 
-	 * @return Boolean true if succeful
+	 * @return boolean - true or false
 	 */
 	public static boolean newDay() {
 		// Texthantering av textArea
@@ -51,7 +58,7 @@ public class Day implements DayInterface {
 	/**
 	 * 
 	 * @param dateInsert
-	 * @return
+	 * @return boolean - true or false
 	 */
 	public static boolean insertDay(String dateInsert) {
 		// Texthantering av textArea
@@ -72,14 +79,15 @@ public class Day implements DayInterface {
 	/**
 	 * 
 	 * @param okPane Canvas for Dialogbox Yes/No/Cancel
-	 * @return Boolean true if succeful
+	 * @return int - for dialogbox choice 0=Yes, 1=No, 2=Cancel
 	 */
-	public static int saveDay(DialogBox okPane) {
+	public static int saveDay(DialogBox okPane, JFrame frame) {
 		int val = 0;
 		// Implamentera controll på om katalog som skall sparas till existerar?
 		if (DiaryWinGUI.textArea.getBackground() == Color.WHITE) {
 			DiaryWinGUI.textFieldHMIOutputText.setText("  SPARA ÖPPEN DAGBOKS NOTERING?");
-			val = okPane.OptionOkNoCancel();
+
+			val = okPane.OptionOkNoCancel(frame);
 			if (val == 0) {
 				// Skapa en kontroll som ser om öppen dag sparas"
 				// DiaryLibrary.saveTheDay("./2022/05/20220520.txt");
@@ -104,7 +112,7 @@ public class Day implements DayInterface {
 	 * Saving actions to assist method saveDay()
 	 * 
 	 * @param filename Name of the day being saved. ex. 20220515.txt
-	 * @return
+	 * @return boolean - true or false
 	 */
 	public static boolean savingTheDay(String filename) {
 		boolean status = false;
@@ -145,7 +153,7 @@ public class Day implements DayInterface {
 	 * Search method not yet implemented
 	 * 
 	 * @param day Search for day?
-	 * @return If succeful true.
+	 * @return boolean - true or false
 	 */
 	public boolean searchDays(String day) {
 		// kod för att ladda dag
